@@ -1,27 +1,24 @@
-import {getRequestConfig} from 'next-intl/server';
+import { getRequestConfig } from "next-intl/server";
 
-export const locales = ['en', 'es', 'it', 'fr', 'de'] as const;
-export const defaultLocale = 'en' as const;
+export const locales = ["en", "es", "it", "fr", "de"] as const;
+export const defaultLocale = "en" as const;
 export type Locale = (typeof locales)[number];
 
-const messageLoaders: Record<Locale, () => Promise<any>> = {
-  en: () => import('../../messages/en.json').then(m => m.default),
-  es: () => import('../../messages/es.json').then(m => m.default),
-  it: () => import('../../messages/it.json').then(m => m.default),
-  fr: () => import('../../messages/fr.json').then(m => m.default),
-  de: () => import('../../messages/de.json').then(m => m.default)
+// Static import map to avoid runtime/bundler issues in Vercel
+const messagesMap: Record<Locale, () => Promise<any>> = {
+  en: () => import("../../messages/en.json"),
+  es: () => import("../../messages/es.json"),
+  it: () => import("../../messages/it.json"),
+  fr: () => import("../../messages/fr.json"),
+  de: () => import("../../messages/de.json")
 };
 
-export default getRequestConfig(async ({requestLocale}) => {
-  const locale = await requestLocale;
+export default getRequestConfig(async ({ requestLocale }) => {
+  let locale = (await requestLocale) as Locale | undefined;
 
-  if (!locale || !locales.includes(locale as Locale)) {
-    const messages = await messageLoaders[defaultLocale]();
-    return {locale: defaultLocale, messages};
-  }
+  if (!locale || !locales.includes(locale)) locale = defaultLocale;
 
-  const typedLocale = locale as Locale;
-  const messages = await messageLoaders[typedLocale]();
+  const messages = (await messagesMap[locale]()).default;
 
-  return {locale: typedLocale, messages};
+  return { locale, messages };
 });

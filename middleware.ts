@@ -1,42 +1,41 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
-let intlMiddleware: ((req: NextRequest) => Response) | null = null;
-
-function getIntlMiddleware() {
-  if (!intlMiddleware) {
-    intlMiddleware = createMiddleware({
-      locales: ["en", "es", "it", "fr", "de"],
-      defaultLocale: "en"
-    });
-  }
-  return intlMiddleware;
-}
+const intlMiddleware = createMiddleware({
+  locales: ["en", "es", "it", "fr", "de"],
+  defaultLocale: "en",
+  localePrefix: "always"
+});
 
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Skip Next internals, API, and static assets
+  // Skip API, Next internals, and static assets (edge-safe)
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/favicon") ||
-    pathname.startsWith("/robots") ||
-    pathname.startsWith("/sitemap") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
     pathname.includes(".")
   ) {
     return NextResponse.next();
   }
 
   try {
-    return getIntlMiddleware()(req);
+    const res = intlMiddleware(req);
+
+    // Attach debug header (verify in Vercel response headers)
+    res.headers.set("x-i18n-mw", "ok");
+    return res;
   } catch (err) {
-    // FAIL OPEN so we never get a white 500 screen again
+    // Fail-open: never hard-500 the site again
     console.error("❌ next-intl middleware crashed:", err);
     return NextResponse.next();
   }
 }
 
 export const config = {
+  // Apply to everything except api, _next, and files with extension
   matcher: ["/((?!api|_next|.*\\..*).*)"]
 };
