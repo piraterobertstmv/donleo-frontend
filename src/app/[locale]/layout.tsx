@@ -8,9 +8,6 @@ import { locales } from "@/i18n/request"
 import { LangAttributeUpdater } from "@/components/layout/lang-attribute-updater"
 import { I18nSmokeTest } from "@/components/i18n/I18nSmokeTest"
 
-))
-}
-
 export async function generateMetadata({
   params
 }: {
@@ -18,10 +15,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = params
 
-  // CRITICAL: Tell next-intl what locale we're using
   setRequestLocale(locale)
 
-  // CRITICAL: Pass locale to getTranslations so it loads the correct language
   const t = await getTranslations({ locale, namespace: "landing" })
   return {
     title: t("meta.title") || "DonLeo — Your AI Dating Wingman",
@@ -42,7 +37,6 @@ export default async function LocaleLayout({
 
   if (!locales.includes(localeParam as any)) notFound()
 
-  // ✅ THIS is the missing piece for server components to use the right locale
   setRequestLocale(localeParam)
 
   const messages = await getMessages({ locale: localeParam })
@@ -55,4 +49,3 @@ export default async function LocaleLayout({
     </NextIntlClientProvider>
   )
 }
-
