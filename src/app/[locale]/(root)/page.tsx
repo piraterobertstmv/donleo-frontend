@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { Link } from '@/i18n/routing'
 import { Sparkles, MessageSquare, Shield, Zap, Heart, Apple, Smartphone, Target, Star, Search, Edit, Brain, MessageSquare as MessageIcon } from "lucide-react"
 import { PrimaryCTA } from "@/components/ui/primary-cta"

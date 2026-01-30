@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
