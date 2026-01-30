@@ -31,12 +31,10 @@ export function useMockChat(locale: Locale = 'en') {
     setIsLoading(true)
     try {
       // Convert messages to format expected by API
-      const chatHistory = messages
-        .filter(m => m.role !== "system")
-        .map(m => ({
-          role: m.role === "leo" ? "assistant" as const : "user" as const,
-          content: m.content,
-        }))
+      const chatHistory = messages.map(m => ({
+        role: m.role === "leo" ? "assistant" : "user",
+        content: m.content,
+      }))
 
       const response = await fetch("/api/chat", {
         method: "POST",
