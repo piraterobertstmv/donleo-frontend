@@ -1,5 +1,6 @@
+export const dynamic = "force-dynamic"
+
 import type { Metadata } from "next"
-import { routing } from "@/i18n/routing"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
@@ -7,8 +8,7 @@ import { locales } from "@/i18n/request"
 import { LangAttributeUpdater } from "@/components/layout/lang-attribute-updater"
 import { I18nSmokeTest } from "@/components/i18n/I18nSmokeTest"
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
+))
 }
 
 export async function generateMetadata({
