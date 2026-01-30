@@ -112,41 +112,58 @@
       "afternoon": "Buenas tardes",
       "evening": "Buenas noches"
     },
-    "ready": "¿Listo para llevar tu juego de citas al siguiente nivel?",
+    "ready": "¿Listo para mejorar tu juego?",
     "chatCard": {
-      "title": "Chatea con DonLeo",
-      "subtitle": "Tu wingman de IA personal está listo para ayudar",
+      "title": "Chat con Don Leo",
+      "subtitle": "Obtén consejos de dating del GOAT del dating",
       "online": "En línea"
     },
     "marketing": {
       "title": "Tu wingman que realmente lee la sala.",
       "subtitle": "Suelta el contexto. Te diré qué decir, qué NO decir y por qué funciona.",
-      "pickCard": "Elige una tarjeta abajo para comenzar."
+      "pickCard": "Elige uno y Leo te guiará"
     },
-    "featuresTitle": "¿Con qué puedo ayudar?"
+    "featuresTitle": "Lo que puedes hacer",
+    "startChat": "Iniciar chat"
   },
   "features": {
     "analyze": {
-      "title": "Traduciré el subtexto",
-      "description": "Capturas de pantalla entran. Significado sale. (Sí, incluso ese 'jaja'.)"
+      "title": "Analizar Conversación",
+      "description": "Descifra sus mensajes e intenciones"
     },
     "replies": {
-      "title": "3 respuestas. Cero pánico.",
-      "description": "Elige el estilo: suave, divertido, salvaje... tú sigues siendo tú. De 'dejado en leído' a 'vaya'."
+      "title": "Mejores Opciones de Respuesta",
+      "description": "Obtén múltiples respuestas elaboradas"
     },
     "rewrite": {
-      "title": "Actualiza tu borrador",
-      "description": "Mismo mensaje, entrega mejorada. Sin impuesto de vergüenza."
+      "title": "Reescribir mi Mensaje",
+      "description": "Mejora el estilo de tu mensaje"
     },
     "thinking": {
-      "title": "¿Cuál es la jugada?",
-      "description": "Mapearé el siguiente movimiento para que no arruines el momento."
-    }
+      "title": "¿Qué está Pensando?",
+      "description": "Comprende el subtexto"
+    },
+    "responseMode": "Modo de respuesta",
+    "chooseResponseStyle": "Elige el estilo de tu respuesta",
+    "advice": "Consejos",
+    "smartResponses": "Respuestas inteligentes adaptadas a tu estilo",
+    "responses": "Respuestas",
+    "generatePerfectResponses": "Genera respuestas perfectas al instante.",
+    "privacy": "Privado",
+    "yourDataSecure": "Tus datos están seguros y encriptados"
   },
   "chat": {
-    "title": "DonLeo",
+    "title": "Don Leo",
     "online": "En línea",
-    "placeholder": "Escribe un mensaje...",
+    "placeholder": "Pregúntale a Don Leo...",
+    "yourWingman": "Tu Wingman",
+    "screenshotsCounter": "capturas",
+    "charsLeft": "caracteres restantes",
+    "donLeoThinking": "Don Leo está pensando...",
+    "thinkingDots": "Leo está pensando...",
+    "donLeoGreeting": "¡Yo! Soy Don Leo, tu Wingman de Dating. 🎯\n\nPega una captura de pantalla de la conversación o describe qué está pasando, ¡y te ayudaré a crear un mensaje que realmente funcione!\n\n¿Cuál es tu movimiento?",
+    "somethingWentWrong": "¡Oops! Algo salió mal. ¿Intentar de nuevo?",
+    "maximum5Screenshots": "Máximo 5 capturas de pantalla permitidas",
     "actions": {
       "analyze": "Analizar chat",
       "reply": "Sugerir respuesta",
@@ -155,17 +172,26 @@
     }
   },
   "rizz": {
-    "title": "DonLeo",
+    "title": "Don Leo",
     "subtitle": "Sube una captura de pantalla. Obtén respuestas instantáneas que realmente funcionan.",
     "step1": "1. Sube la captura de pantalla",
     "step2": "2. Elige tu sabor",
     "step3": "3. Tus sugerencias de respuesta",
     "generating": "Preparando respuestas...",
-    "generateBtn": "Generar respuestas",
+    "generateBtn": "Generar Respuestas",
     "moreOptions": "Obtener más opciones",
     "emptyState": "Sube una captura de pantalla y elige un modo para comenzar",
     "copy": "Copiar",
-    "copied": "¡Copiado!"
+    "copied": "¡Copiado!",
+    "imagensDeConversacion": "Imágenes de la conversación",
+    "subeHasta3Imagenes": "Sube hasta 3 imágenes de tu chat",
+    "agregar": "Agregar",
+    "modoDeRespuesta": "Modo de respuesta",
+    "eligeEstilo": "Elige el estilo de tu respuesta",
+    "cambiarImagenes": "Cambiar imágenes",
+    "respuestas": "Respuestas",
+    "generaRespuestasPerfectas": "Genera respuestas perfectas al instante.",
+    "volverAModos": "Volver a modos"
   },
   "auth": {
     "login": {
@@ -213,6 +239,10 @@
   "profile": {
     "title": "Perfil",
     "freePlan": "Plan Gratuito",
+    "memberSince": "Miembro desde",
+    "premiumPlan": "Plan Premium",
+    "unblockAllFeatures": "Desbloquea todas las funciones y contenido premium",
+    "upgradeNow": "Actualizar Ahora →",
     "upgrade": {
       "title": "Actualizar a Premium",
       "description": "Respuestas ilimitadas. Soporte prioritario. Sin cerebro.",
@@ -222,7 +252,8 @@
     "notifications": "Notificaciones",
     "privacy": "Privacidad",
     "settings": "Configuración",
-    "logout": "Cerrar sesión"
+    "language": "Idioma",
+    "logout": "Cerrar Sesión"
   },
   "nav": {
     "wingman": "Wingman",
@@ -238,7 +269,14 @@
     "submit": "Enviar",
     "cancel": "Cancelar",
     "close": "Cerrar",
-    "contactUs": "Contáctanos"
+    "contactUs": "Contáctanos",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "premium": {
+    "unlockUnlimitedCoaching": "Desbloquea coaching ilimitado",
+    "unlimitedFeatures": "Chats ilimitados • Análisis avanzado • Historial",
+    "goPremium": "Hazte Premium"
   },
   "locales": {
     "en": "English",
@@ -249,8 +287,8 @@
   },
   "modes": {
     "smooth": "Suave y Directo",
-    "funny": "Divertido y Pícara",
-    "short": "Corto y Contundente",
+    "funny": "Divertido y Cursi",
+    "short": "Corto e Impactante",
     "nerd": "Nerd / Cultura Pop",
     "savage": "Salvaje e Ingenioso"
   },

@@ -112,41 +112,58 @@
       "afternoon": "Good afternoon",
       "evening": "Good evening"
     },
-    "ready": "Ready to level up your dating game?",
+    "ready": "Ready to upgrade your game?",
     "chatCard": {
-      "title": "Chat with DonLeo",
-      "subtitle": "Your personal AI wingman is ready to help",
+      "title": "Chat with Don Leo",
+      "subtitle": "Get dating advice from the GOAT of dating",
       "online": "Online"
     },
     "marketing": {
       "title": "Your wingman who actually reads the room.",
       "subtitle": "Drop the context. I'll tell you what to say, what NOT to say, and why it works.",
-      "pickCard": "Pick a card below to start."
+      "pickCard": "Pick one and Leo will guide you"
     },
-    "featuresTitle": "What can I help with?"
+    "featuresTitle": "What you can do",
+    "startChat": "Start chat"
   },
   "features": {
     "analyze": {
-      "title": "I'll translate the subtext",
-      "description": "Screenshots in. Meaning out. (Yes, even that 'haha'.)"
+      "title": "Analyze conversation",
+      "description": "Decode her messages and intentions"
     },
     "replies": {
-      "title": "3 replies. Zero panic.",
-      "description": "Pick the vibe: smooth, funny, savage... you stay you. From 'left on read' to 'damn.'"
+      "title": "Best reply options",
+      "description": "Get multiple crafted responses"
     },
     "rewrite": {
-      "title": "Upgrade your draft",
-      "description": "Same message, upgraded delivery. No cringe tax."
+      "title": "Rewrite my message",
+      "description": "Improve your message style"
     },
     "thinking": {
-      "title": "What's the play here?",
-      "description": "I'll map the next move so you don't fumble the moment."
-    }
+      "title": "What is she thinking?",
+      "description": "Understand the subtext"
+    },
+    "responseMode": "Response Mode",
+    "chooseResponseStyle": "Choose your response style",
+    "advice": "Advice",
+    "smartResponses": "Smart responses adapted to your style",
+    "responses": "Responses",
+    "generatePerfectResponses": "Generate perfect responses instantly.",
+    "privacy": "Privacy",
+    "yourDataSecure": "Your data is secure and encrypted"
   },
   "chat": {
-    "title": "DonLeo",
+    "title": "Don Leo",
     "online": "Online",
-    "placeholder": "Type a message...",
+    "placeholder": "Ask Don Leo...",
+    "yourWingman": "Your Wingman",
+    "screenshotsCounter": "screenshots",
+    "charsLeft": "chars left",
+    "donLeoThinking": "Don Leo is thinking...",
+    "thinkingDots": "Leo is thinking...",
+    "donLeoGreeting": "Yo! I'm Don Leo, your Dating Wingman. 🎯\n\nPaste a conversation screenshot or describe what's happening, and I'll help you craft a message that actually works.\n\nWhat's the move?",
+    "somethingWentWrong": "Oops! Something went wrong. Try again?",
+    "maximum5Screenshots": "Maximum 5 screenshots allowed",
     "actions": {
       "analyze": "Analyze chat",
       "reply": "Suggest reply",
@@ -155,17 +172,26 @@
     }
   },
   "rizz": {
-    "title": "DonLeo",
+    "title": "Don Leo",
     "subtitle": "Upload a screenshot. Get instant replies that actually work.",
     "step1": "1. Upload the screenshot",
     "step2": "2. Pick your flavor",
     "step3": "3. Your reply suggestions",
     "generating": "Cooking up replies...",
-    "generateBtn": "Generate replies",
+    "generateBtn": "Generate Responses",
     "moreOptions": "Get more options",
     "emptyState": "Upload a screenshot and pick a mode to get started",
     "copy": "Copy",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "imagensDeConversacion": "Conversation Images",
+    "subeHasta3Imagenes": "Upload up to 3 images from your chat",
+    "agregar": "Add",
+    "modoDeRespuesta": "Response Mode",
+    "eligeEstilo": "Choose your response style",
+    "cambiarImagenes": "Change images",
+    "respuestas": "Responses",
+    "generaRespuestasPerfectas": "Generate perfect responses instantly.",
+    "volverAModos": "Back to modes"
   },
   "auth": {
     "login": {
@@ -214,6 +240,10 @@
     "title": "Profile",
     "freePlan": "Free Plan",
     "subscription": "Subscription",
+    "memberSince": "Member since",
+    "premiumPlan": "Premium Plan",
+    "unblockAllFeatures": "Unlock all features and premium content",
+    "upgradeNow": "Upgrade Now →",
     "upgrade": {
       "title": "Upgrade to Premium",
       "description": "Unlimited responses. Priority support. No brainer.",
@@ -222,7 +252,8 @@
     "notifications": "Notifications",
     "privacy": "Privacy",
     "settings": "Settings",
-    "logout": "Log out"
+    "language": "Language",
+    "logout": "Logout"
   },
   "nav": {
     "wingman": "Wingman",
@@ -238,7 +269,14 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "close": "Close",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "premium": {
+    "unlockUnlimitedCoaching": "Unlock unlimited coaching",
+    "unlimitedFeatures": "Unlimited chats • Advanced analysis • History",
+    "goPremium": "Go Premium"
   },
   "locales": {
     "en": "English",
