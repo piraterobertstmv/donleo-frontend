@@ -1,25 +1,22 @@
+import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
-let _intlMiddleware: ((req: NextRequest) => Response) | null = null;
+let intlMiddleware: ((req: NextRequest) => Response) | null = null;
 
 function getIntlMiddleware() {
-  if (_intlMiddleware) return _intlMiddleware;
-
-  // Lazy import so any edge/runtime issues happen inside try/catch
-  const createMiddleware = require("next-intl/middleware").default as any;
-
-  _intlMiddleware = createMiddleware({
-    locales: ["en", "es", "it", "fr", "de"],
-    defaultLocale: "en"
-  });
-
-  return _intlMiddleware!;
+  if (!intlMiddleware) {
+    intlMiddleware = createMiddleware({
+      locales: ["en", "es", "it", "fr", "de"],
+      defaultLocale: "en"
+    });
+  }
+  return intlMiddleware;
 }
 
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Skip Next internals, API, and static files
+  // Skip Next internals, API, and static assets
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
@@ -32,14 +29,11 @@ export default function middleware(req: NextRequest) {
   }
 
   try {
-    // Temporary debug log (keep minimal)
-    console.log("✅ middleware hit:", pathname);
-
-    const intlMiddleware = getIntlMiddleware();
-    return intlMiddleware(req);
+    return getIntlMiddleware()(req);
   } catch (err) {
-    console.error("❌ middleware crashed:", err);
-    return NextResponse.next(); // fail-open (no more white 500 screen)
+    // FAIL OPEN so we never get a white 500 screen again
+    console.error("❌ next-intl middleware crashed:", err);
+    return NextResponse.next();
   }
 }
 
