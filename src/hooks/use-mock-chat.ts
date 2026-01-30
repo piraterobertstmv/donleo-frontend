@@ -31,8 +31,8 @@ export function useMockChat(locale: Locale = 'en') {
     setIsLoading(true)
     try {
       // Convert messages to format expected by API
-      const chatHistory = messages.map(m => ({
-        role: m.role === "leo" ? "assistant" : "user",
+      const chatHistory: Array<{ role: "user" | "assistant"; content: string }> = messages.map(m => ({
+        role: (m.role === "leo" ? "assistant" : "user") as const,
         content: m.content,
       }))
 
