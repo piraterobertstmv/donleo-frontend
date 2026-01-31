@@ -152,16 +152,9 @@ export default function SubscriptionPage() {
                 >
                   {plan.hasTrial ? t('trialCta') : t('startNow')}
                 </PrimaryCTA>
-                {plan.hasTrial && (
-                  <p className="text-center text-sm text-muted">
-                    {t('cancelAnytime')}
-                  </p>
-                )}
-                {!plan.hasTrial && (
-                  <p className="text-center text-sm text-muted">
-                    Then €{plan.price}/{plan.period}
-                  </p>
-                )}
+                <p className="text-center text-sm text-muted min-h-[20px]">
+                  {plan.hasTrial ? t('cancelAnytime') : `Then €${plan.price}/${plan.period}`}
+                </p>
               </div>
             </div>
           ))}
