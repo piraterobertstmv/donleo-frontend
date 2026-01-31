@@ -253,16 +253,6 @@ export default function RizzPage() {
             </div>
           </div>
         )}
-
-        {/* Empty State */}
-        {responses.length === 0 && !isGenerating && (
-          <div className="rounded-3xl border-2 border-dashed border-cardBorder bg-surface/50 p-12 text-center">
-            <Sparkles className="mx-auto mb-4 h-12 w-12 text-muted" />
-            <p className="text-body-lg text-muted">
-              {tRizz('emptyState')}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   )
