@@ -23,6 +23,7 @@ export function ChatUI({
   const [input, setInput] = React.useState("")
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const quickActions = [
     { label: t('actions.analyze'), message: "Can you analyze this conversation for me?" },
@@ -53,6 +54,24 @@ export function ChatUI({
   const handleQuickAction = (message: string) => {
     if (!isLoading) {
       onSendMessage(message)
+    }
+  }
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      // Handle file upload - for now, just add a notification to the input
+      const fileName = files[0].name
+      const currentText = input ? `${input}\n[Attached: ${fileName}]` : `[Attached: ${fileName}]`
+      setInput(currentText)
+    }
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
     }
   }
 
@@ -128,9 +147,19 @@ export function ChatUI({
         )}
 
         <form onSubmit={handleSubmit} className="flex items-end gap-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/*,.pdf"
+            aria-label="Attach file"
+          />
           <button
             type="button"
-            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface2 hover:text-text"
+            onClick={handleFileClick}
+            disabled={isLoading}
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface2 hover:text-text disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Paperclip className="h-5 w-5" />
           </button>
