@@ -1,73 +1,85 @@
-import { NextRequest, NextResponse } from "next/server"
-import { buildChatMessages } from "@/lib/ai/prompts"
+import { NextRequest, NextResponse } from "next/server";
+import { buildChatPayload } from "@/lib/ai/prompts";
 
-export const runtime = "edge"
+export const runtime = "edge";
 
 interface ChatRequest {
-  locale: string
-  chatHistory: Array<{ role: "user" | "assistant"; content: string }>
-  userMessage: string
+  locale: string;
+  chatHistory: Array<{ role: "user" | "assistant"; content: string }>;
+  userMessage: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body: ChatRequest = await req.json()
-    const { locale, chatHistory, userMessage } = body
+    const body: ChatRequest = await req.json();
+    const { locale, chatHistory, userMessage } = body;
 
-    if (!userMessage) {
+    if (!userMessage?.trim()) {
       return NextResponse.json(
-        { error: "userMessage is required" },
+        { error: "userMessage is required and cannot be empty" },
         { status: 400 }
-      )
+      );
     }
 
-    // Build messages using DonLeo prompts
-    const messages = buildChatMessages({
+    // Build high-quality payload using DonLeo system prompt
+    const payload = buildChatPayload({
       locale: locale || "en",
-      chatHistory: chatHistory || [],
+      history: chatHistory || [],
       userMessage,
-    })
+    });
 
-    // ============================================================
-    // TODO: Replace with actual LLM API call
-    //
-    // Example with OpenAI SDK:
-    //
-    // import OpenAI from 'openai'
-    // const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-    //
-    // const completion = await openai.chat.completions.create({
-    //   model: "gpt-4o-mini",
-    //   messages: messages.map(m => ({
-    //     role: m.role,
-    //     content: m.content
-    //   })),
-    //   temperature: 0.85,
-    //   presence_penalty: 0.6,
-    //   frequency_penalty: 0.4,
-    //   max_tokens: 500,
-    // })
-    // const response = completion.choices[0]?.message?.content || "No response"
-    // ============================================================
+    // Call OpenAI API with tuned parameters for chat
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: payload.system },
+          ...payload.messages,
+        ],
+        temperature: 0.9, // Higher = more creative, less repetitive
+        presence_penalty: 0.7, // Penalize repeating same topics
+        frequency_penalty: 0.4, // Moderate penalty on token frequency
+        max_tokens: 450,
+        top_p: 0.95,
+      }),
+    });
 
-    // Mock response for development - remove when connecting to real LLM
-    const mockResponses = [
-      "I hear you. What's the specific situation?",
-      "Got it. Tell me more — what did they say exactly?",
-      "Interesting. What are you thinking of doing next?",
-      "I'm listening. What's on your mind?",
-    ]
-    const response = mockResponses[Math.floor(Math.random() * mockResponses.length)]
+    if (!openaiResponse.ok) {
+      const errorData = await openaiResponse.json();
+      console.error("OpenAI API error:", errorData);
+      return NextResponse.json(
+        { error: "OpenAI API call failed", details: errorData },
+        { status: openaiResponse.status }
+      );
+    }
+
+    const data = await openaiResponse.json();
+    const response = data.choices?.[0]?.message?.content || "";
+
+    if (!response) {
+      return NextResponse.json(
+        { error: "No response from OpenAI" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       response,
-      messagesUsed: messages, // For debugging - remove in production
-    })
+      locale,
+    });
   } catch (error) {
-    console.error("Chat API error:", error)
+    console.error("Chat API error:", error);
     return NextResponse.json(
-      { error: "Failed to process chat request" },
+      {
+        error: "Failed to process chat request",
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
-    )
+    );
   }
 }
