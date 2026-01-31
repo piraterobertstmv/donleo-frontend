@@ -21,49 +21,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build high-quality payload using DonLeo system prompt
-    const payload = buildChatPayload({
-      locale: locale || "en",
-      history: chatHistory || [],
-      userMessage,
-    });
+    // Get backend URL from environment
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
-    // Call OpenAI API with tuned parameters for chat
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Call backend AI endpoint instead of OpenAI directly
+    const backendResponse = await fetch(`${backendUrl}/api/ai/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: payload.system },
-          ...payload.messages,
-        ],
-        temperature: 0.9, // Higher = more creative, less repetitive
-        presence_penalty: 0.7, // Penalize repeating same topics
-        frequency_penalty: 0.4, // Moderate penalty on token frequency
-        max_tokens: 450,
-        top_p: 0.95,
+        locale: locale || "en",
+        chatHistory: chatHistory || [],
+        userMessage,
       }),
     });
 
-    if (!openaiResponse.ok) {
-      const errorData = await openaiResponse.json();
-      console.error("OpenAI API error:", errorData);
+    if (!backendResponse.ok) {
+      const errorData = await backendResponse.json();
+      console.error("Backend API error:", errorData);
       return NextResponse.json(
-        { error: "OpenAI API call failed", details: errorData },
-        { status: openaiResponse.status }
+        { error: "Backend API call failed", details: errorData },
+        { status: backendResponse.status }
       );
     }
 
-    const data = await openaiResponse.json();
-    const response = data.choices?.[0]?.message?.content || "";
+    const data = await backendResponse.json();
+    const response = data.response || "";
 
     if (!response) {
       return NextResponse.json(
-        { error: "No response from OpenAI" },
+        { error: "No response from backend" },
         { status: 500 }
       );
     }
