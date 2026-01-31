@@ -16,6 +16,7 @@ interface Plan {
   popular?: boolean
   bestValue?: boolean
   savings?: string
+  hasTrial?: boolean
 }
 
 export default function SubscriptionPage() {
@@ -25,8 +26,9 @@ export default function SubscriptionPage() {
     {
       id: 'weekly',
       name: t('planWeekly'),
-      price: 3.99,
+      price: 2.99,
       period: t('perWeek'),
+      hasTrial: false,
     },
     {
       id: 'monthly',
@@ -35,6 +37,7 @@ export default function SubscriptionPage() {
       period: t('perMonth'),
       badge: t('badgePopular'),
       popular: true,
+      hasTrial: true,
     },
     {
       id: 'yearly',
@@ -44,6 +47,7 @@ export default function SubscriptionPage() {
       badge: t('badgeBestValue'),
       bestValue: true,
       savings: t('savings'),
+      hasTrial: false,
     },
   ]
 
@@ -146,11 +150,18 @@ export default function SubscriptionPage() {
                     plan.popular || plan.bestValue ? '' : 'bg-surface2 text-text hover:bg-surface3'
                   }`}
                 >
-                  {t('trialCta')}
+                  {plan.hasTrial ? t('trialCta') : t('startNow')}
                 </PrimaryCTA>
-                <p className="text-center text-sm text-muted">
-                  Then €{plan.price}/{plan.period}
-                </p>
+                {plan.hasTrial && (
+                  <p className="text-center text-sm text-muted">
+                    {t('cancelAnytime')}
+                  </p>
+                )}
+                {!plan.hasTrial && (
+                  <p className="text-center text-sm text-muted">
+                    Then €{plan.price}/{plan.period}
+                  </p>
+                )}
               </div>
             </div>
           ))}
