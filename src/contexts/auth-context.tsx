@@ -45,13 +45,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Sign up wrapper
+  // Sign up wrapper - also create profile on backend
   const handleSignUp = async (
     email: string,
     password: string,
     displayName?: string
   ) => {
-    await signUp(email, password, displayName);
+    const userCredential = await signUp(email, password, displayName);
+    
+    // Create profile on backend MongoDB
+    if (userCredential.user) {
+      try {
+        const token = await userCredential.user.getIdToken();
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/create-profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ displayName: displayName || email.split('@')[0] }),
+        });
+
+        if (!response.ok) {
+          console.error('Failed to create backend profile:', await response.text());
+        } else {
+          console.log('✅ Backend profile created successfully');
+        }
+      } catch (error) {
+        console.error('Error creating backend profile:', error);
+      }
+    }
     // Auth state change listener will handle setting user/profile
   };
 
