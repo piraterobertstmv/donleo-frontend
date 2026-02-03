@@ -30,39 +30,39 @@ export default function SubscriptionPage() {
   const plans: Plan[] = [
     {
       id: 'weekly',
-      name: t('planWeekly'),
+      name: t('plans.weekly.name'),
       price: 2.99,
-      period: t('perWeek'),
+      period: `/${t('plans.weekly.period')}`,
       hasTrial: false,
       checkoutUrl: 'https://buy.stripe.com/cNifZi6XI6tR2AmdURejK02',
     },
     {
       id: 'monthly',
-      name: t('planMonthly'),
+      name: t('plans.monthly.name'),
       price: 8.99,
-      period: t('perMonth'),
-      badge: t('badgePopular'),
+      period: `/${t('plans.monthly.period')}`,
+      badge: t('plans.monthly.badge'),
       popular: true,
       hasTrial: true,
       checkoutUrl: 'https://buy.stripe.com/cNi6oI81McSf5MybMJejK01',
     },
     {
       id: 'yearly',
-      name: t('planYearly'),
+      name: t('plans.annual.name'),
       price: 49.99,
-      period: t('perYear'),
-      badge: t('badgeBestValue'),
+      period: `/${t('plans.annual.period')}`,
+      badge: t('plans.annual.badge'),
       bestValue: true,
-      savings: t('savings'),
+      savings: t('plans.annual.savePercent'),
       hasTrial: false,
       checkoutUrl: 'https://buy.stripe.com/eVq14o1Do2dBa2O6spejK00',
     },
   ]
 
   const features = [
-    t('featureUnlimited'),
-    t('featureModes'),
-    t('featurePriority'),
+    t('features.unlimited'),
+    t('features.modes'),
+    t('features.priority'),
   ]
 
   const handleCheckout = (planId: string, checkoutUrl: string) => {
