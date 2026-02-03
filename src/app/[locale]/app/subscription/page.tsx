@@ -7,7 +7,6 @@ import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { Link } from '@/i18n/routing'
-import { useStripeCheckout } from '@/hooks/use-stripe-checkout'
 
 interface Plan {
   id: 'weekly' | 'monthly' | 'yearly'
@@ -19,16 +18,15 @@ interface Plan {
   bestValue?: boolean
   savings?: string
   hasTrial?: boolean
-  priceId: string
+  checkoutUrl: string
 }
 
 export default function SubscriptionPage() {
   const t = useTranslations('subscription')
   const tBilling = useTranslations('billing')
-  const { createCheckoutSession, loading, error } = useStripeCheckout()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
-  // Map Stripe price IDs (update these with your actual Stripe price IDs)
+  // Stripe Billing Links for direct checkout
   const plans: Plan[] = [
     {
       id: 'weekly',
@@ -36,7 +34,7 @@ export default function SubscriptionPage() {
       price: 2.99,
       period: t('perWeek'),
       hasTrial: false,
-      priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_WEEKLY || 'price_weekly',
+      checkoutUrl: 'https://buy.stripe.com/cNifZi6XI6tR2AmdURejK02',
     },
     {
       id: 'monthly',
@@ -46,7 +44,7 @@ export default function SubscriptionPage() {
       badge: t('badgePopular'),
       popular: true,
       hasTrial: true,
-      priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_monthly',
+      checkoutUrl: 'https://buy.stripe.com/cNi6oI81McSf5MybMJejK01',
     },
     {
       id: 'yearly',
@@ -57,7 +55,7 @@ export default function SubscriptionPage() {
       bestValue: true,
       savings: t('savings'),
       hasTrial: false,
-      priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY || 'price_yearly',
+      checkoutUrl: 'https://buy.stripe.com/eVq14o1Do2dBa2O6spejK00',
     },
   ]
 
@@ -67,9 +65,10 @@ export default function SubscriptionPage() {
     t('featurePriority'),
   ]
 
-  const handleCheckout = async (priceId: string, planId: string) => {
+  const handleCheckout = (planId: string, checkoutUrl: string) => {
     setSelectedPlan(planId)
-    await createCheckoutSession(priceId)
+    // Redirect directly to Stripe Billing Link
+    window.location.href = checkoutUrl
   }
 
   return (
@@ -160,15 +159,15 @@ export default function SubscriptionPage() {
               {/* CTA */}
               <div className="space-y-3">
                 <button
-                  onClick={() => handleCheckout(plan.priceId, plan.id)}
-                  disabled={loading || selectedPlan === plan.id}
+                  onClick={() => handleCheckout(plan.id, plan.checkoutUrl)}
+                  disabled={selectedPlan === plan.id}
                   className={`w-full px-6 py-3 rounded-full font-semibold transition-all ${
                     plan.popular || plan.bestValue 
                       ? 'bg-accentCTA text-white hover:bg-accentPressed disabled:opacity-50' 
                       : 'bg-surface2 text-text hover:bg-surface3 disabled:opacity-50'
-                  } ${loading && selectedPlan === plan.id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  } ${selectedPlan === plan.id ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {loading && selectedPlan === plan.id ? 'Loading...' : plan.hasTrial ? t('trialCta') : t('startNow')}
+                  {plan.hasTrial ? t('trialCta') : t('startNow')}
                 </button>
                 <p className="text-center text-sm text-muted min-h-[20px]">
                   {plan.hasTrial ? t('cancelAnytime') : `Then €${plan.price}/${plan.period}`}
@@ -177,14 +176,6 @@ export default function SubscriptionPage() {
             </div>
           ))}
         </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="mb-8 p-4 rounded-2xl bg-red-500/20 border border-red-500/30">
-            <p className="text-red-500 font-medium">{tBilling('checkoutError')}</p>
-            <p className="text-red-500/80 text-sm">{error}</p>
-          </div>
-        )}
 
         {/* Free Plan Note */}
         <div className="text-center text-muted text-body-md">
