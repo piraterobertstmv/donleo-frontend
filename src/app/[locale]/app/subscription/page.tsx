@@ -84,18 +84,40 @@ export default function SubscriptionPage() {
       </header>
 
       {/* Main Content */}
-      <main className="px-4 md:px-6 py-12 md:py-16 max-w-6xl mx-auto">
+      <main className="px-4 md:px-6 py-8 md:py-12 max-w-6xl mx-auto">
+        {/* Your Profile Card */}
+        <div className="mb-8 md:mb-12 p-4 md:p-6 rounded-2xl border border-cardBorder bg-surface/50 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-accentSoft flex items-center justify-center">
+              <span className="text-lg md:text-xl">👤</span>
+            </div>
+            <div>
+              <p className="font-semibold text-text">Your Profile</p>
+              <p className="text-xs md:text-sm text-muted">{/* User email would go here */}</p>
+            </div>
+          </div>
+          <div className="px-3 py-1 rounded-full bg-accentSoft text-accent text-xs md:text-sm font-semibold">
+            Free
+          </div>
+        </div>
+
         {/* Hero Section */}
         <div className="text-center mb-8 md:mb-12">
+          {/* 3-day free trial badge */}
+          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-accentSoft text-accent text-xs font-semibold">
+            ✨ 3-day free trial
+          </div>
+          
           <div className="flex items-center justify-center gap-2 mb-4">
             <Crown className="h-6 sm:h-8 w-6 sm:w-8 text-accentCTA" />
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-text">
               {t('title')}
             </h1>
           </div>
-          <p className="text-base sm:text-lg md:text-xl text-muted max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted max-w-2xl mx-auto mb-2">
             {t('subtitle')}
           </p>
+          <p className="text-sm text-muted/70">Secure checkout in one click</p>
         </div>
 
         {/* Pricing Cards */}
