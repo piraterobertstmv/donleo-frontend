@@ -476,5 +476,20 @@
       "priority": "Priority generation speed",
       "earlyAccess": "Early access to new modes/features"
     }
+  },
+  "billing": {
+    "processing": "Processing your payment...",
+    "processingSubtitle": "Please wait while we confirm your subscription",
+    "successTitle": "Welcome to Premium!",
+    "successSubtitle": "Your subscription is now active. Enjoy unlimited access to all features.",
+    "sessionId": "Session ID",
+    "backToApp": "Back to App",
+    "viewProfile": "View Profile",
+    "cancelTitle": "Payment Cancelled",
+    "cancelSubtitle": "No charges were made to your account.",
+    "cancelMessage": "If you experienced any issues, feel free to try again or contact support.",
+    "tryAgain": "Try Again",
+    "checkoutError": "Checkout Error",
+    "checkoutErrorMessage": "Failed to create checkout session. Please try again."
   }
 }

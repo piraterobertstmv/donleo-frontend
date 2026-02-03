@@ -476,5 +476,20 @@
       "priority": "Velocidad de generación prioritaria",
       "earlyAccess": "Acceso temprano a nuevos modos/features"
     }
+  },
+  "billing": {
+    "processing": "Procesando tu pago...",
+    "processingSubtitle": "Por favor espera mientras confirmamos tu suscripción",
+    "successTitle": "¡Bienvenido a Premium!",
+    "successSubtitle": "Tu suscripción ya está activa. Disfruta de acceso ilimitado a todas las funciones.",
+    "sessionId": "ID de Sesión",
+    "backToApp": "Volver a la App",
+    "viewProfile": "Ver Perfil",
+    "cancelTitle": "Pago Cancelado",
+    "cancelSubtitle": "No se realizó ningún cargo en tu cuenta.",
+    "cancelMessage": "Si experimentaste problemas, siéntete libre de intentar nuevamente o contacta con soporte.",
+    "tryAgain": "Intentar de Nuevo",
+    "checkoutError": "Error de Pago",
+    "checkoutErrorMessage": "No se pudo crear la sesión de pago. Por favor intenta de nuevo."
   }
 }
