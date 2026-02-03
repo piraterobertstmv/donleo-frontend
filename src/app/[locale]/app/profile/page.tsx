@@ -49,7 +49,7 @@ export default function ProfilePage() {
     {
       id: 'weekly',
       name: t('plans.weekly.name'),
-      price: '€3.99',
+      price: '€2.99',
       period: t('plans.weekly.period'),
       checkoutUrl: STRIPE_PAYMENT_LINKS.weekly,
     },
