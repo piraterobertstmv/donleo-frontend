@@ -491,5 +491,16 @@
     "tryAgain": "Intentar de Nuevo",
     "checkoutError": "Error de Pago",
     "checkoutErrorMessage": "No se pudo crear la sesión de pago. Por favor intenta de nuevo."
+  },
+  "premium": {
+    "lockedFeature": "Característica Premium",
+    "upgradeToPremium": "Actualizar a Premium",
+    "premiumBenefits": "Premium incluye:",
+    "benefit1": "Generación ilimitada de respuestas",
+    "benefit2": "5 modos y estilos de respuesta",
+    "benefit3": "Velocidad de procesamiento prioritaria",
+    "notAvailable": "Esta característica solo está disponible para miembros premium",
+    "upgradePrompt": "Desbloquea premium para usar esta característica",
+    "comingSoon": "Próximamente para miembros premium"
   }
 }

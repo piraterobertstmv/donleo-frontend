@@ -491,5 +491,16 @@
     "tryAgain": "Try Again",
     "checkoutError": "Checkout Error",
     "checkoutErrorMessage": "Failed to create checkout session. Please try again."
+  },
+  "premium": {
+    "lockedFeature": "Premium Feature",
+    "upgradeToPremium": "Upgrade to Premium",
+    "premiumBenefits": "Premium includes:",
+    "benefit1": "Unlimited response generation",
+    "benefit2": "5 response modes & styles",
+    "benefit3": "Priority processing speed",
+    "notAvailable": "This feature is only available for premium members",
+    "upgradePrompt": "Unlock premium to use this feature",
+    "comingSoon": "Coming soon for premium members"
   }
 }

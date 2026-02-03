@@ -6,8 +6,10 @@ import { Sparkles, RefreshCw, Copy, Check } from "lucide-react"
 import { UploadDropzone } from "@/components/ui/upload-dropzone"
 import { PastelTile } from "@/components/ui/pastel-tile"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
+import { PremiumWall } from "@/components/premium-wall"
 import { UploadedImage, RizzResponse } from "@/types"
 import { getModeResponses, Locale } from "@/lib/responses"
+import { usePremium } from "@/hooks/use-premium"
 
 // Get localized rizz modes
 const getLocalizedRizzModes = (t: any) => [
@@ -106,6 +108,7 @@ export default function RizzPage() {
   const tRizz = useTranslations('rizz')
   const tModes = useTranslations('modes')
   const locale = useLocale() as Locale
+  const { isPremium, isLoading } = usePremium()
 
   const rizzModes = getLocalizedRizzModes(tModes)
   const [images, setImages] = useState<UploadedImage[]>([])
@@ -142,6 +145,20 @@ export default function RizzPage() {
 
   const getModeName = (modeKey: string) => {
     return tModes(modeKey)
+  }
+
+  // Show premium wall if user is not premium and not loading
+  if (!isPremium && !isLoading) {
+    return (
+      <div className="px-4 py-6 md:px-8 md:py-8">
+        <div className="mx-auto max-w-4xl">
+          <PremiumWall
+            featureName={tRizz('title')}
+            description={tRizz('subtitle')}
+          />
+        </div>
+      </div>
+    )
   }
 
   return (
