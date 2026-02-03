@@ -7,6 +7,7 @@ import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { Link } from '@/i18n/routing'
+import { useAuth } from '@/contexts/auth-context'
 
 interface Plan {
   id: 'weekly' | 'monthly' | 'yearly'
@@ -24,6 +25,7 @@ interface Plan {
 export default function SubscriptionPage() {
   const t = useTranslations('subscription')
   const tBilling = useTranslations('billing')
+  const { user, profile, loading } = useAuth()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
   // Stripe Billing Links for direct checkout
@@ -71,6 +73,11 @@ export default function SubscriptionPage() {
     window.location.href = checkoutUrl
   }
 
+  // Get user display info
+  const displayName = profile?.displayName || user?.displayName || user?.email?.split('@')[0] || 'User'
+  const displayEmail = user?.email || 'user@example.com'
+  const isPremium = profile?.isPremium ?? false
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -92,12 +99,12 @@ export default function SubscriptionPage() {
               <span className="text-lg md:text-xl">👤</span>
             </div>
             <div>
-              <p className="font-semibold text-text">Your Profile</p>
-              <p className="text-xs md:text-sm text-muted">{/* User email would go here */}</p>
+              <p className="font-semibold text-text">{displayName}</p>
+              <p className="text-xs md:text-sm text-muted">{displayEmail}</p>
             </div>
           </div>
           <div className="px-3 py-1 rounded-full bg-accentSoft text-accent text-xs md:text-sm font-semibold">
-            Free
+            {isPremium ? t('planStatus.premium') : t('planStatus.free')}
           </div>
         </div>
 
