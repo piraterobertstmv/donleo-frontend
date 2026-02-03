@@ -72,14 +72,14 @@ export default function SubscriptionPage() {
       {/* Main Content */}
       <main className="px-4 md:px-6 py-12 md:py-16 max-w-6xl mx-auto">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Crown className="h-8 w-8 text-accentCTA" />
-            <h1 className="text-4xl md:text-5xl font-bold text-text">
+            <Crown className="h-6 sm:h-8 w-6 sm:w-8 text-accentCTA" />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-text">
               {t('title')}
             </h1>
           </div>
-          <p className="text-xl text-muted max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
         </div>
@@ -89,7 +89,7 @@ export default function SubscriptionPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative rounded-3xl border-2 p-6 md:p-8 flex flex-col ${
+              className={`relative rounded-3xl border-2 p-6 md:p-8 flex flex-col w-full ${
                 plan.popular
                   ? 'border-accentCTA bg-surface shadow-lg shadow-accentCTA/20'
                   : plan.bestValue

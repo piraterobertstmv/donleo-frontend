@@ -23,17 +23,22 @@ export default async function LandingPage({
     <div className="min-h-screen bg-background">
       {/* Minimal Navbar */}
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between px-4 md:px-6 py-4 max-w-6xl mx-auto">
+        <div className="flex items-center justify-between px-4 md:px-6 py-4 max-w-6xl mx-auto gap-4">
           <DonLeoLogo size="md" priority href="/" locale={locale} />
           <LanguageSwitcher />
-          <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 md:gap-4">
             <Link
               href="/login"
               locale={locale}
-              className="text-body-lg text-white hover:text-white/80 transition-colors font-medium"
+              className="text-body-md sm:text-body-lg text-white hover:text-white/80 transition-colors font-medium"
             >
               {t('header.login')}
             </Link>
+            <Link href="/signup" locale={locale}>
+              <PrimaryCTA size="default">{t('header.getStarted')}</PrimaryCTA>
+            </Link>
+          </div>
+          <div className="sm:hidden">
             <Link href="/signup" locale={locale}>
               <PrimaryCTA size="default">{t('header.getStarted')}</PrimaryCTA>
             </Link>
@@ -61,7 +66,7 @@ export default async function LandingPage({
           </div>
 
           {/* Headline */}
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-text leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-8 text-text leading-tight tracking-tight">
             <span className="block">{t('hero.titleLine1')}</span>
             <span className="block">
               <span className="text-muted">{t('hero.titleLine2Start')} </span>
@@ -72,7 +77,7 @@ export default async function LandingPage({
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted mb-12 max-w-2xl mx-auto leading-relaxed">
             {t('hero.subtitle')}
           </p>
 
@@ -97,10 +102,10 @@ export default async function LandingPage({
           </div>
 
           {/* App Store Badges */}
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-12 flex flex-col xs:flex-row sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <a
               href="#"
-              className="flex items-center gap-3 rounded-2xl bg-white text-black px-6 py-3 transition-all hover:bg-white/90 hover:scale-105"
+              className="w-full sm:w-auto flex items-center gap-3 rounded-2xl bg-white text-black px-6 py-3 transition-all hover:bg-white/90 hover:scale-105"
             >
               <Apple className="h-8 w-8" />
               <div className="text-left">
@@ -110,7 +115,7 @@ export default async function LandingPage({
             </a>
             <button
               disabled
-              className="flex items-center gap-3 rounded-2xl border border-cardBorder bg-surface text-muted px-6 py-3 cursor-not-allowed opacity-50"
+              className="w-full sm:w-auto flex items-center gap-3 rounded-2xl border border-cardBorder bg-surface text-muted px-6 py-3 cursor-not-allowed opacity-50"
             >
               <Smartphone className="h-8 w-8" />
               <div className="text-left">
