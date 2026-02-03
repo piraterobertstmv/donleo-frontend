@@ -257,24 +257,6 @@
   "debug": {
     "hello": "Hallo DE"
   },
-  "subscription": {
-    "title": "Abonnement",
-    "subtitle": "Verwalten Sie Ihren Plan. Starten Sie mit einer 3-tägigen kostenlosen Testphase.",
-    "badgePopular": "Am Beliebtesten",
-    "badgeBestValue": "Bester Wert",
-    "savings": "58% sparen",
-    "planWeekly": "Wöchentlich",
-    "planMonthly": "Monatlich",
-    "planYearly": "Jährlich",
-    "perWeek": "Woche",
-    "perMonth": "Monat",
-    "perYear": "Jahr",
-    "trialCta": "3 Tage kostenlose Testphase starten",
-    "featureUnlimited": "Unbegrenzte Antworten",
-    "featureModes": "Alle 5 Geschmacksrichtungen/Modi",
-    "featurePriority": "Priorisierter Support",
-    "freePlanNote": "Kostenloser Plan: 10 Antworten/Tag"
-  },
   "legal": {
     "privacyTitle": "Datenschutzerklärung",
     "privacyIntro": "Ihre Privatsphäre ist uns wichtig. Diese Richtlinie erklärt, wie wir Ihre persönlichen Informationen sammeln, verwenden und schützen.",
@@ -386,7 +368,8 @@
     "subtitle": "Starte mit einer 3-tägigen kostenlosen Testphase. Jederzeit kündbar.",
     "secure": "Sichere Bezahlung mit einem Klick",
     "trialBadge": "3 Tage kostenlos testen",
-    "cta": "3-tägige kostenlose Testphase starten",
+    "trialCta": "3-tägige kostenlose Testphase starten",
+    "startNow": "Jetzt Starten",
     "thenPrice": "Danach {price}/{period}",
     "cancelAnytime": "Jederzeit vor Tag 3 kündbar",
     "logout": "Abmelden",

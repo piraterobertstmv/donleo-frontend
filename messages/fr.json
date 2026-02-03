@@ -257,24 +257,6 @@
   "debug": {
     "hello": "Bonjour FR"
   },
-  "subscription": {
-    "title": "Abonnement",
-    "subtitle": "Gérez votre plan. Commencez par un essai gratuit de 3 jours.",
-    "badgePopular": "Plus Populaire",
-    "badgeBestValue": "Meilleure Valeur",
-    "savings": "Économisez 58%",
-    "planWeekly": "Hebdomadaire",
-    "planMonthly": "Mensuel",
-    "planYearly": "Annuel",
-    "perWeek": "semaine",
-    "perMonth": "mois",
-    "perYear": "an",
-    "trialCta": "Commencer l'essai gratuit de 3 jours",
-    "featureUnlimited": "Réponses illimitées",
-    "featureModes": "Tous les 5 saveurs/modes",
-    "featurePriority": "Support prioritaire",
-    "freePlanNote": "Plan gratuit : 10 réponses/jour"
-  },
   "legal": {
     "privacyTitle": "Politique de Confidentialité",
     "privacyIntro": "Votre vie privée est importante pour nous. Cette politique explique comment nous collectons, utilisons et protégeons vos informations personnelles.",
@@ -386,7 +368,8 @@
     "subtitle": "Commencez avec un essai gratuit de 3 jours. Annulez à tout moment.",
     "secure": "Paiement sécurisé en un clic",
     "trialBadge": "Essai gratuit de 3 jours",
-    "cta": "Commencer l'essai gratuit de 3 jours",
+    "trialCta": "Commencer l'essai gratuit de 3 jours",
+    "startNow": "Commencer Maintenant",
     "thenPrice": "Puis {price}/{period}",
     "cancelAnytime": "Annulez avant le jour 3",
     "logout": "Se déconnecter",
