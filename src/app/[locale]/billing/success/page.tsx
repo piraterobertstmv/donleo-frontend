@@ -12,7 +12,7 @@ export default function BillingSuccessPage() {
   const t = useTranslations('billing')
   const locale = useLocale()
   const searchParams = useSearchParams()
-  const { refreshProfile } = useAuth()
+  const { user, refreshProfile } = useAuth()
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -20,9 +20,36 @@ export default function BillingSuccessPage() {
     const id = searchParams.get('session_id')
     setSessionId(id)
 
-    // Refresh profile from backend to get updated isPremium status (set by Stripe webhook)
-    refreshProfile?.()
-  }, [searchParams, refreshProfile])
+    const confirmAndRefresh = async () => {
+      if (!id) {
+        refreshProfile?.()
+        return
+      }
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+        const token = user ? await user.getIdToken() : null
+        if (backendUrl && token) {
+          const res = await fetch(`${backendUrl}/api/billing/confirm-session`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ session_id: id }),
+          })
+          if (res.ok) {
+            await refreshProfile?.()
+          }
+        } else {
+          refreshProfile?.()
+        }
+      } catch {
+        refreshProfile?.()
+      }
+    }
+
+    confirmAndRefresh()
+  }, [searchParams, refreshProfile, user])
 
   useEffect(() => {
     // Brief loading state for confirmation
