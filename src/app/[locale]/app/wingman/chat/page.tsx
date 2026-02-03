@@ -8,11 +8,44 @@ import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import { ChatUI } from "@/components/chat/chat-ui"
 import { useMockChat } from "@/hooks/use-mock-chat"
+import { usePremium } from "@/hooks/use-premium"
+import { PremiumWall } from "@/components/premium-wall"
 
 export default function WingmanChatPage() {
   const t = useTranslations('chat')
   const locale = useLocale()
   const { messages, sendMessage, isLoading } = useMockChat(locale as any)
+  const { isPremium, isLoading: premiumLoading } = usePremium()
+
+  // Show premium wall if user is not premium
+  if (!isPremium && !premiumLoading) {
+    return (
+      <div className="flex h-screen flex-col">
+        <header className="sticky top-0 z-30 border-b border-cardBorder bg-surface/80 backdrop-blur-md">
+          <div className="flex items-center gap-3 px-4 py-3 md:px-8">
+            <Link
+              href="/app/wingman"
+              locale={locale}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface2 hover:text-text"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <div>
+              <p className="text-body-md font-medium text-text">{t('title')}</p>
+            </div>
+          </div>
+        </header>
+        <div className="flex-1 flex items-center justify-center bg-background px-4">
+          <div className="w-full max-w-2xl">
+            <PremiumWall
+              featureName={t('title')}
+              description={t('yourWingman')}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen flex-col">
