@@ -28,7 +28,7 @@ export default function SubscriptionPage() {
   const { user, profile, loading } = useAuth()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
-  // Stripe Billing Links for direct checkout
+  // Stripe Billing Links for direct checkout (TEST MODE)
   const plans: Plan[] = [
     {
       id: 'weekly',
@@ -36,7 +36,7 @@ export default function SubscriptionPage() {
       price: 2.99,
       period: `/${t('plans.weekly.period')}`,
       hasTrial: false,
-      checkoutUrl: 'https://buy.stripe.com/cNifZi6XI6tR2AmdURejK02',
+      checkoutUrl: 'https://buy.stripe.com/test_8x200k2FT16s2VmdLl5J600',
     },
     {
       id: 'monthly',
@@ -46,7 +46,7 @@ export default function SubscriptionPage() {
       badge: t('plans.monthly.badge'),
       popular: true,
       hasTrial: true,
-      checkoutUrl: 'https://buy.stripe.com/cNi6oI81McSf5MybMJejK01',
+      checkoutUrl: 'https://buy.stripe.com/test_cNi7sM5S5cPa1RidLl5J602',
     },
     {
       id: 'yearly',
@@ -57,7 +57,7 @@ export default function SubscriptionPage() {
       bestValue: true,
       savings: t('plans.annual.savePercent'),
       hasTrial: false,
-      checkoutUrl: 'https://buy.stripe.com/eVq14o1Do2dBa2O6spejK00',
+      checkoutUrl: 'https://buy.stripe.com/test_dRm3cw3JXaH27bCcHh5J601',
     },
   ]
 
