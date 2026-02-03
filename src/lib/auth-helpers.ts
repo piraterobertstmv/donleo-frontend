@@ -8,12 +8,6 @@ import {
   AuthError,
 } from 'firebase/auth';
 import { auth } from './firebase/client';
-import {
-  createUserProfile,
-  getUserProfile,
-  updateLastLogin,
-  UserProfile,
-} from './firestore-helpers';
 
 /**
  * Sign up a new user with email and password
@@ -68,9 +62,7 @@ export async function signIn(
       password
     );
 
-    // Update last login timestamp in Firestore
-    await updateLastLogin(userCredential.user.uid);
-
+    // Last login is updated by backend when /api/auth/profile is fetched
     return userCredential;
   } catch (error) {
     console.error('Sign in error:', error);

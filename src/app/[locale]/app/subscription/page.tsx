@@ -8,6 +8,7 @@ import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { Link } from '@/i18n/routing'
 import { useAuth } from '@/contexts/auth-context'
+import { STRIPE_PAYMENT_LINKS } from '@/lib/stripe-links'
 
 interface Plan {
   id: 'weekly' | 'monthly' | 'yearly'
@@ -24,11 +25,9 @@ interface Plan {
 
 export default function SubscriptionPage() {
   const t = useTranslations('subscription')
-  const tBilling = useTranslations('billing')
-  const { user, profile, loading } = useAuth()
+  const { user, profile } = useAuth()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
-  // Stripe Billing Links for direct checkout (TEST MODE)
   const plans: Plan[] = [
     {
       id: 'weekly',
@@ -36,7 +35,7 @@ export default function SubscriptionPage() {
       price: 2.99,
       period: `/${t('plans.weekly.period')}`,
       hasTrial: false,
-      checkoutUrl: 'https://buy.stripe.com/test_8x200k2FT16s2VmdLl5J600',
+      checkoutUrl: STRIPE_PAYMENT_LINKS.weekly,
     },
     {
       id: 'monthly',
@@ -46,7 +45,7 @@ export default function SubscriptionPage() {
       badge: t('plans.monthly.badge'),
       popular: true,
       hasTrial: true,
-      checkoutUrl: 'https://buy.stripe.com/test_cNi7sM5S5cPa1RidLl5J602',
+      checkoutUrl: STRIPE_PAYMENT_LINKS.monthly,
     },
     {
       id: 'yearly',
@@ -57,7 +56,7 @@ export default function SubscriptionPage() {
       bestValue: true,
       savings: t('plans.annual.savePercent'),
       hasTrial: false,
-      checkoutUrl: 'https://buy.stripe.com/test_dRm3cw3JXaH27bCcHh5J601',
+      checkoutUrl: STRIPE_PAYMENT_LINKS.annual,
     },
   ]
 
@@ -204,11 +203,6 @@ export default function SubscriptionPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Free Plan Note */}
-        <div className="text-center text-muted text-body-md">
-          {t('freePlanNote')}
         </div>
       </main>
     </div>

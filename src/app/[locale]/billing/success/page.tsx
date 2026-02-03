@@ -6,11 +6,13 @@ import { CheckCircle, Loader } from 'lucide-react'
 import { Link } from '@/i18n/routing'
 import { useLocale, useTranslations } from 'next-intl'
 import { PrimaryCTA } from '@/components/ui/primary-cta'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function BillingSuccessPage() {
   const t = useTranslations('billing')
   const locale = useLocale()
   const searchParams = useSearchParams()
+  const { refreshProfile } = useAuth()
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -18,13 +20,17 @@ export default function BillingSuccessPage() {
     const id = searchParams.get('session_id')
     setSessionId(id)
 
-    // Simulate a brief loading state for confirmation
+    // Refresh profile from backend to get updated isPremium status (set by Stripe webhook)
+    refreshProfile?.()
+  }, [searchParams, refreshProfile])
+
+  useEffect(() => {
+    // Brief loading state for confirmation
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 1500)
-
+    }, 2000)
     return () => clearTimeout(timer)
-  }, [searchParams])
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accentSoft/5 flex items-center justify-center px-4 py-12">

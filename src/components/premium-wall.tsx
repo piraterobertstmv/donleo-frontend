@@ -1,9 +1,9 @@
 'use client'
 
 import { Lock } from 'lucide-react'
-import { Link } from '@/i18n/routing'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { PrimaryCTA } from '@/components/ui/primary-cta'
+import { STRIPE_PAYMENT_LINKS } from '@/lib/stripe-links'
 
 interface PremiumWallProps {
   featureName: string
@@ -13,9 +13,9 @@ interface PremiumWallProps {
 /**
  * Premium access wall component
  * Shows when user doesn't have premium access to a feature
+ * CTA goes directly to Stripe payment link (monthly plan)
  */
 export const PremiumWall = ({ featureName, description }: PremiumWallProps) => {
-  const locale = useLocale()
   const t = useTranslations('premium')
 
   return (
@@ -42,12 +42,17 @@ export const PremiumWall = ({ featureName, description }: PremiumWallProps) => {
         </p>
       )}
 
-      {/* CTA */}
-      <Link href="/app/subscription" locale={locale}>
+      {/* CTA - direct to Stripe */}
+      <a
+        href={STRIPE_PAYMENT_LINKS.monthly}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block"
+      >
         <PrimaryCTA size="large">
           {t('upgradeToPremium')}
         </PrimaryCTA>
-      </Link>
+      </a>
 
       {/* Benefits */}
       <div className="mt-8 pt-8 border-t border-cardBorder w-full">

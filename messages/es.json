@@ -312,8 +312,7 @@
     "cancelAnytime": "Cancela antes de 24 horas",
     "featureUnlimited": "Generación ilimitada de respuestas",
     "featureModes": "5 modos y estilos de respuesta",
-    "featurePriority": "Velocidad de procesamiento prioritaria",
-    "freePlanNote": "10 respuestas gratuitas diarias. Sin tarjeta de crédito requerida."
+    "featurePriority": "Velocidad de procesamiento prioritaria"
   },
   "legal": {
     "privacyTitle": "Política de Privacidad",

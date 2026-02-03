@@ -9,7 +9,7 @@ import {
   onAuthStateChange,
   getAuthErrorMessage,
 } from '@/lib/auth-helpers';
-import { getUserProfile, UserProfile } from '@/lib/firestore-helpers';
+import type { UserProfile } from '@/lib/firestore-helpers';
 
 interface AuthContextValue {
   user: User | null;
@@ -23,25 +23,67 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+// Fetch profile from backend MongoDB (source of truth for isPremium)
+const fetchProfileFromBackend = async (token: string): Promise<UserProfile | null> => {
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (!backendUrl) return null;
+  const res = await fetch(`${backendUrl}/api/auth/profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return {
+    uid: data.firebaseUid ?? data.uid,
+    email: data.email,
+    displayName: data.displayName,
+    isPremium: data.isPremium ?? false,
+    subscription: data.subscription,
+    createdAt: typeof data.createdAt === 'string' ? Date.parse(data.createdAt) : data.createdAt,
+    updatedAt: typeof data.updatedAt === 'string' ? Date.parse(data.updatedAt) : data.updatedAt,
+    lastLoginAt: data.lastLoginAt,
+  };
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user profile from Firestore
-  const fetchProfile = async (uid: string) => {
+  // Fetch user profile from backend MongoDB (includes isPremium from Stripe webhook)
+  const fetchProfile = async (firebaseUser: User) => {
     try {
-      const userProfile = await getUserProfile(uid);
-      setProfile(userProfile);
+      const token = await firebaseUser.getIdToken();
+      let userProfile = await fetchProfileFromBackend(token);
+      // If no profile (e.g. user signed up before MongoDB), try to create one
+      if (!userProfile) {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        if (backendUrl) {
+          const createRes = await fetch(`${backendUrl}/api/auth/create-profile`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
+            }),
+          });
+          if (createRes.ok) {
+            userProfile = await fetchProfileFromBackend(token);
+          }
+        }
+      }
+      setProfile(userProfile ?? null);
     } catch (error) {
       console.error('Error fetching user profile:', error);
+      setProfile(null);
     }
   };
 
-  // Refresh profile (useful after updates)
+  // Refresh profile (useful after payment, etc.)
   const refreshProfile = async () => {
     if (user) {
-      await fetchProfile(user.uid);
+      await fetchProfile(user);
     }
   };
 
@@ -107,12 +149,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Subscribe to auth state changes
-    const unsubscribe = onAuthStateChange(async (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChange(async (authUser) => {
+      setUser(authUser);
 
-      if (user) {
-        // Fetch user profile from Firestore
-        await fetchProfile(user.uid);
+      if (authUser) {
+        // Fetch profile from backend MongoDB (source of truth for isPremium)
+        await fetchProfile(authUser);
       } else {
         setProfile(null);
       }

@@ -7,6 +7,7 @@ import { LogOut, Trash2, Check, Crown, Sparkles, User, Mail, Shield, X } from "l
 import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
+import { STRIPE_PAYMENT_LINKS } from "@/lib/stripe-links"
 
 interface PricingPlan {
   id: 'weekly' | 'monthly' | 'annual'
@@ -16,6 +17,7 @@ interface PricingPlan {
   badge?: string
   popular?: boolean
   savePercent?: string
+  checkoutUrl: string
 }
 
 export default function ProfilePage() {
@@ -25,9 +27,7 @@ export default function ProfilePage() {
   const router = useRouter()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  // TODO: Use real premium status from profile.isPremium when backend is connected
-  // For now, default to false so pricing cards show
-  const isPremium = profile?.isPremium || false
+  const isPremium = profile?.isPremium ?? false
 
   const handleLogout = async () => {
     await signOut()
@@ -51,6 +51,7 @@ export default function ProfilePage() {
       name: t('plans.weekly.name'),
       price: '€3.99',
       period: t('plans.weekly.period'),
+      checkoutUrl: STRIPE_PAYMENT_LINKS.weekly,
     },
     {
       id: 'monthly',
@@ -59,6 +60,7 @@ export default function ProfilePage() {
       period: t('plans.monthly.period'),
       badge: t('plans.monthly.badge'),
       popular: true,
+      checkoutUrl: STRIPE_PAYMENT_LINKS.monthly,
     },
     {
       id: 'annual',
@@ -67,6 +69,7 @@ export default function ProfilePage() {
       period: t('plans.annual.period'),
       badge: t('plans.annual.badge'),
       savePercent: t('plans.annual.savePercent'),
+      checkoutUrl: STRIPE_PAYMENT_LINKS.annual,
     },
   ]
 
@@ -245,14 +248,19 @@ export default function ProfilePage() {
                   </div>
 
                   {/* CTA */}
-                  <button className={cn(
-                    "w-full rounded-2xl px-4 py-3 text-body-lg font-semibold transition-all mb-3",
-                    plan.popular
-                      ? "bg-accentCTA text-white hover:bg-accentPressed shadow-md"
-                      : "bg-accentSoft text-accent hover:bg-accentSoft/80"
-                  )}>
-                    {t('cta')}
-                  </button>
+                  <a
+                    href={plan.checkoutUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "block w-full rounded-2xl px-4 py-3 text-body-lg font-semibold transition-all mb-3 text-center",
+                      plan.popular
+                        ? "bg-accentCTA text-white hover:bg-accentPressed shadow-md"
+                        : "bg-accentSoft text-accent hover:bg-accentSoft/80"
+                    )}
+                  >
+                    {t('startNow')}
+                  </a>
                   <p className="text-center text-body-sm text-muted mb-6">
                     {t('thenPrice', { price: plan.price, period: plan.period })}
                   </p>
