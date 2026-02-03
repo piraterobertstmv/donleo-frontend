@@ -30,15 +30,17 @@ export async function signUp(
   displayName?: string
 ): Promise<UserCredential> {
   try {
-    // Create user in Firebase Auth
+    // Create user in Firebase Auth only
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
 
-    // Create user profile in Firestore
-    await createUserProfile(userCredential.user.uid, email, displayName);
+    // DON'T create Firestore profile here
+    // The frontend will call backend /api/auth/create-profile instead
+    // This creates the MongoDB profile directly
+    console.log('✅ Firebase Auth user created:', userCredential.user.uid);
 
     return userCredential;
   } catch (error) {

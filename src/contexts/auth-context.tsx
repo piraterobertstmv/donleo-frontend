@@ -51,13 +51,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     displayName?: string
   ) => {
+    console.log('🔐 Starting signup...');
     const userCredential = await signUp(email, password, displayName);
+    console.log('✅ Firebase auth user created:', userCredential.user.uid);
     
     // Create profile on backend MongoDB
     if (userCredential.user) {
       try {
         const token = await userCredential.user.getIdToken();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/create-profile`, {
+        console.log('🔑 Got Firebase ID token');
+        
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        console.log('📍 Backend URL:', backendUrl);
+        
+        const createProfileUrl = `${backendUrl}/api/auth/create-profile`;
+        console.log('📤 Calling:', createProfileUrl);
+        
+        const response = await fetch(createProfileUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -66,13 +76,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           body: JSON.stringify({ displayName: displayName || email.split('@')[0] }),
         });
 
+        console.log('📬 Backend response status:', response.status);
+        const responseText = await response.text();
+        console.log('📬 Backend response:', responseText);
+
         if (!response.ok) {
-          console.error('Failed to create backend profile:', await response.text());
+          console.error('❌ Failed to create backend profile:', responseText);
         } else {
-          console.log('✅ Backend profile created successfully');
+          console.log('✅ MongoDB profile created successfully');
         }
       } catch (error) {
-        console.error('Error creating backend profile:', error);
+        console.error('❌ Error creating backend profile:', error);
       }
     }
     // Auth state change listener will handle setting user/profile
