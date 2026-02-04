@@ -7,16 +7,20 @@ interface ChatRequest {
   locale: string;
   chatHistory: Array<{ role: "user" | "assistant"; content: string }>;
   userMessage: string;
+  images?: string[];
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body: ChatRequest = await req.json();
-    const { locale, chatHistory, userMessage } = body;
+    const { locale, chatHistory, userMessage, images } = body;
 
-    if (!userMessage?.trim()) {
+    const hasText = Boolean(userMessage?.trim());
+    const hasImages = Boolean(images?.length);
+
+    if (!hasText && !hasImages) {
       return NextResponse.json(
-        { error: "userMessage is required and cannot be empty" },
+        { error: "userMessage or images is required" },
         { status: 400 }
       );
     }
@@ -33,7 +37,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         locale: locale || "en",
         chatHistory: chatHistory || [],
-        userMessage,
+        userMessage: userMessage || "",
+        images: images || [],
       }),
     });
 

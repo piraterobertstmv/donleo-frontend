@@ -17,24 +17,36 @@ export function useMockChat(locale: Locale = 'en') {
   ])
   const [isLoading, setIsLoading] = useState(false)
 
-  const sendMessage = async (content: string) => {
-    // Add user message
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(String(reader.result))
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+
+  const sendMessage = async (content: string, images?: File[]) => {
+    const imageUrls = images?.map((f) => URL.createObjectURL(f)) ?? []
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
       content,
       timestamp: new Date(),
+      images: imageUrls.length > 0 ? imageUrls : undefined,
     }
     setMessages((prev) => [...prev, userMessage])
 
-    // Call DonLeo Chat API
     setIsLoading(true)
     try {
-      // Convert messages to format expected by API
       const chatHistory = messages.map(m => {
         const role: "user" | "assistant" = m.role === "leo" ? "assistant" : "user"
         return { role, content: m.content }
       })
+
+      const base64Images = images?.length
+        ? await Promise.all(images.map(fileToBase64))
+        : undefined
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -43,6 +55,7 @@ export function useMockChat(locale: Locale = 'en') {
           locale,
           chatHistory,
           userMessage: content,
+          images: base64Images,
         }),
       })
 

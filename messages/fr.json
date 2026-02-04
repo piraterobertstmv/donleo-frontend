@@ -147,6 +147,7 @@
     "title": "DonLeo",
     "online": "En ligne",
     "placeholder": "Écris un message...",
+    "placeholderWithScreenshot": "Ajoute ta question ou envoie...",
     "extracting": "Lecture de la capture...",
     "attachFile": "Joindre capture",
     "actions": {

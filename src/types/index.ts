@@ -3,6 +3,8 @@ export interface Message {
   role: 'user' | 'leo'
   content: string
   timestamp: Date
+  /** Image URLs for display (user messages with attached screenshots) */
+  images?: string[]
 }
 
 export interface UploadedImage {

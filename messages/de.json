@@ -147,6 +147,7 @@
     "title": "DonLeo",
     "online": "Online",
     "placeholder": "Schreibe eine Nachricht...",
+    "placeholderWithScreenshot": "Frage hinzufügen oder senden...",
     "extracting": "Screenshot wird gelesen...",
     "attachFile": "Screenshot anhängen",
     "actions": {

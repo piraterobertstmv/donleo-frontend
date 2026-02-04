@@ -1,14 +1,20 @@
 "use client"
 
 import React, { useRef, useEffect } from "react"
-import { Send, Paperclip, Smile } from "lucide-react"
+import { Send, Paperclip, Smile, X } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { cn } from "@/lib/utils"
 import { Message } from "@/types"
 
+interface AttachedImage {
+  id: string
+  url: string
+  file: File
+}
+
 interface ChatUIProps {
   messages: Message[]
-  onSendMessage: (content: string) => void
+  onSendMessage: (content: string, images?: File[]) => void
   isLoading?: boolean
   className?: string
 }
@@ -36,11 +42,17 @@ export function ChatUI({
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
+  const [attachedImages, setAttachedImages] = React.useState<AttachedImage[]>([])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input.trim() && !isLoading) {
-      onSendMessage(input.trim())
+    const text = input.trim()
+    const hasContent = text || attachedImages.length > 0
+    if (hasContent && !isLoading) {
+      onSendMessage(text || "", attachedImages.map((a) => a.file))
       setInput("")
+      attachedImages.forEach((a) => URL.revokeObjectURL(a.url))
+      setAttachedImages([])
     }
   }
 
@@ -53,25 +65,18 @@ export function ChatUI({
 
   const handleQuickAction = (message: string) => {
     if (!isLoading) {
-      onSendMessage(message)
+      const files = attachedImages.map((a) => a.file)
+      onSendMessage(message, files.length > 0 ? files : undefined)
+      attachedImages.forEach((a) => URL.revokeObjectURL(a.url))
+      setAttachedImages([])
     }
   }
-
-  const [isExtracting, setIsExtracting] = React.useState(false)
-
-  const fileToBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(String(reader.result))
-      reader.onerror = reject
-      reader.readAsDataURL(file)
-    })
 
   const handleFileClick = () => {
     fileInputRef.current?.click()
   }
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || files.length === 0) return
 
@@ -81,28 +86,22 @@ export function ChatUI({
       return
     }
 
-    setIsExtracting(true)
-    try {
-      const base64Images = await Promise.all(imageFiles.map(fileToBase64))
-      const res = await fetch("/api/extract-screenshot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ images: base64Images }),
-      })
-      if (!res.ok) {
-        setInput((prev) => (prev ? `${prev}\n[Could not read screenshot]` : "[Could not read screenshot]"))
-        return
-      }
-      const data = await res.json()
-      const text = (data.text || "").trim()
-      const block = text
-        ? `--- Conversation from screenshot ---\n${text}\n--- End screenshot ---\n\n`
-        : "[Screenshot attached but no text could be read]\n\n"
-      setInput((prev) => (prev ? prev + block : block))
-    } finally {
-      setIsExtracting(false)
-      if (fileInputRef.current) fileInputRef.current.value = ""
-    }
+    const newImages: AttachedImage[] = imageFiles.slice(0, 5 - attachedImages.length).map((file) => ({
+      id: `${Date.now()}-${Math.random()}`,
+      url: URL.createObjectURL(file),
+      file,
+    }))
+    setAttachedImages((prev) => [...prev, ...newImages])
+    if (fileInputRef.current) fileInputRef.current.value = ""
+  }
+
+  const removeAttachedImage = (id: string) => {
+    setAttachedImages((prev) => {
+      const next = prev.filter((a) => a.id !== id)
+      const removed = prev.find((a) => a.id === id)
+      if (removed) URL.revokeObjectURL(removed.url)
+      return next
+    })
   }
 
   return (
@@ -126,9 +125,23 @@ export function ChatUI({
                     : "bg-surface2 text-text"
                 )}
               >
-                <p className="text-body-md whitespace-pre-wrap">
-                  {message.content}
-                </p>
+                {message.images && message.images.length > 0 && (
+                  <div className="mb-2 flex flex-wrap gap-2">
+                    {message.images.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt=""
+                        className="max-h-40 rounded-2xl object-contain"
+                      />
+                    ))}
+                  </div>
+                )}
+                {message.content ? (
+                  <p className="text-body-md whitespace-pre-wrap">
+                    {message.content}
+                  </p>
+                ) : null}
                 <p
                   className={cn(
                     "mt-1 text-body-sm",
@@ -176,19 +189,40 @@ export function ChatUI({
           </div>
         )}
 
+        {attachedImages.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-2">
+            {attachedImages.map((img) => (
+              <div key={img.id} className="group relative">
+                <img
+                  src={img.url}
+                  alt=""
+                  className="h-20 w-20 rounded-xl object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeAttachedImage(img.id)}
+                  className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="flex items-end gap-3">
           <input
             ref={fileInputRef}
             type="file"
             onChange={handleFileChange}
             className="hidden"
-            accept="image/*,.pdf"
-            aria-label={isExtracting ? t('extracting') : t('attachFile')}
+            accept="image/*"
+            aria-label={t('attachFile')}
           />
           <button
             type="button"
             onClick={handleFileClick}
-            disabled={isLoading || isExtracting}
+            disabled={isLoading}
             className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface2 hover:text-text disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Paperclip className="h-5 w-5" />
@@ -199,7 +233,7 @@ export function ChatUI({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={t('placeholder')}
+              placeholder={attachedImages.length > 0 ? t('placeholderWithScreenshot') : t('placeholder')}
               rows={1}
               className="w-full resize-none rounded-2xl bg-surface2 px-4 py-3 text-body-md text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
               style={{ minHeight: "44px", maxHeight: "120px" }}
@@ -213,7 +247,7 @@ export function ChatUI({
           </button>
           <button
             type="submit"
-            disabled={!input.trim() || isLoading}
+            disabled={(!input.trim() && attachedImages.length === 0) || isLoading}
             className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-accentCTA text-white transition-colors hover:bg-accentPressed disabled:pointer-events-none disabled:opacity-50"
           >
             <Send className="h-5 w-5" />
