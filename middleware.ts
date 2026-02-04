@@ -16,7 +16,6 @@ export default function middleware(req: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
     pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml" ||
     pathname.includes(".")
   ) {
     return NextResponse.next();
