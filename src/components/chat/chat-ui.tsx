@@ -57,21 +57,51 @@ export function ChatUI({
     }
   }
 
+  const [isExtracting, setIsExtracting] = React.useState(false)
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(String(reader.result))
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+
   const handleFileClick = () => {
     fileInputRef.current?.click()
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length > 0) {
-      // Handle file upload - for now, just add a notification to the input
-      const fileName = files[0].name
-      const currentText = input ? `${input}\n[Attached: ${fileName}]` : `[Attached: ${fileName}]`
-      setInput(currentText)
+    if (!files || files.length === 0) return
+
+    const imageFiles = Array.from(files).filter((f) => f.type.startsWith("image/"))
+    if (imageFiles.length === 0) {
+      if (fileInputRef.current) fileInputRef.current.value = ""
+      return
     }
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
+
+    setIsExtracting(true)
+    try {
+      const base64Images = await Promise.all(imageFiles.map(fileToBase64))
+      const res = await fetch("/api/extract-screenshot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ images: base64Images }),
+      })
+      if (!res.ok) {
+        setInput((prev) => (prev ? `${prev}\n[Could not read screenshot]` : "[Could not read screenshot]"))
+        return
+      }
+      const data = await res.json()
+      const text = (data.text || "").trim()
+      const block = text
+        ? `--- Conversation from screenshot ---\n${text}\n--- End screenshot ---\n\n`
+        : "[Screenshot attached but no text could be read]\n\n"
+      setInput((prev) => (prev ? prev + block : block))
+    } finally {
+      setIsExtracting(false)
+      if (fileInputRef.current) fileInputRef.current.value = ""
     }
   }
 
@@ -153,12 +183,12 @@ export function ChatUI({
             onChange={handleFileChange}
             className="hidden"
             accept="image/*,.pdf"
-            aria-label="Attach file"
+            aria-label={isExtracting ? t('extracting') : t('attachFile')}
           />
           <button
             type="button"
             onClick={handleFileClick}
-            disabled={isLoading}
+            disabled={isLoading || isExtracting}
             className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface2 hover:text-text disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Paperclip className="h-5 w-5" />

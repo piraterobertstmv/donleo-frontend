@@ -147,6 +147,8 @@
     "title": "DonLeo",
     "online": "Online",
     "placeholder": "Scrivi un messaggio...",
+    "extracting": "Lettura screenshot...",
+    "attachFile": "Allega screenshot",
     "actions": {
       "analyze": "Analizza chat",
       "reply": "Sugggerisci risposta",

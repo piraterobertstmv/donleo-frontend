@@ -164,6 +164,8 @@
     "donLeoGreeting": "¡Yo! Soy Don Leo, tu Wingman de Dating. 🎯\n\nPega una captura de pantalla de la conversación o describe qué está pasando, ¡y te ayudaré a crear un mensaje que realmente funcione!\n\n¿Cuál es tu movimiento?",
     "somethingWentWrong": "¡Oops! Algo salió mal. ¿Intentar de nuevo?",
     "maximum5Screenshots": "Máximo 5 capturas de pantalla permitidas",
+    "extracting": "Leyendo captura...",
+    "attachFile": "Adjuntar captura",
     "actions": {
       "analyze": "Analizar chat",
       "reply": "Sugerir respuesta",

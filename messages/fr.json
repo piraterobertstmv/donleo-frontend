@@ -147,6 +147,8 @@
     "title": "DonLeo",
     "online": "En ligne",
     "placeholder": "Écris un message...",
+    "extracting": "Lecture de la capture...",
+    "attachFile": "Joindre capture",
     "actions": {
       "analyze": "Analyser la discussion",
       "reply": "Suggérer une réponse",

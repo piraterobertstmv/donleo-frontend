@@ -101,6 +101,24 @@ export default async function LandingPage({
             </div>
           </div>
 
+          {/* Product Hunt Badge */}
+          <div className="mt-8">
+            <a
+              href="https://www.producthunt.com/products/donleo?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-donleo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block transition-opacity hover:opacity-90"
+            >
+              <img
+                alt="DonLeo - Turn awkward chats into confident replies | Product Hunt"
+                width={250}
+                height={54}
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1072718&theme=neutral&t=1770231645479"
+                className="h-[54px] w-[250px]"
+              />
+            </a>
+          </div>
+
           {/* App Store Badges */}
           <div className="mt-12 flex flex-col xs:flex-row sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <a

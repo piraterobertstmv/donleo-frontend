@@ -164,6 +164,8 @@
     "donLeoGreeting": "Yo! I'm Don Leo, your Dating Wingman. 🎯\n\nPaste a conversation screenshot or describe what's happening, and I'll help you craft a message that actually works.\n\nWhat's the move?",
     "somethingWentWrong": "Oops! Something went wrong. Try again?",
     "maximum5Screenshots": "Maximum 5 screenshots allowed",
+    "extracting": "Reading screenshot...",
+    "attachFile": "Attach screenshot",
     "actions": {
       "analyze": "Analyze chat",
       "reply": "Suggest reply",
