@@ -165,7 +165,9 @@
     "moreOptions": "Ottieni più opzioni",
     "emptyState": "Carica uno screenshot e scegli una modalità per iniziare",
     "copy": "Copia",
-    "copied": "Copiato!"
+    "copied": "Copiato!",
+    "contextNotes": "Contesto (opzionale)",
+    "contextNotesPlaceholder": "Incolla la conversazione o aggiungi contesto..."
   },
   "auth": {
     "login": {

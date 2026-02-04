@@ -61,10 +61,10 @@ const generateResponses = async (mode: string, locale: Locale, userNotes?: strin
 
     const data = await response.json()
 
-    // Parse the A/B/C structure from the AI response
+    // Parse the A/B/C/D/E structure from the AI response (5 options per mode)
     const lines = data.response.split('\n')
     const parsedResponses: RizzResponse[] = []
-    const optionRegex = /^[ABC]\)\s*(.+)$/
+    const optionRegex = /^[A-E]\)\s*(.+)$/
 
     for (const line of lines) {
       const match = line.match(optionRegex)
@@ -94,7 +94,7 @@ const generateResponses = async (mode: string, locale: Locale, userNotes?: strin
     const responses = getModeResponses(locale, mode as 'smooth' | 'funny' | 'short' | 'nerd' | 'savage')
     return responses
       .sort(() => Math.random() - 0.5)
-      .slice(0, Math.floor(Math.random() * 3) + 3)
+      .slice(0, 5)
       .map((content, i) => ({
         id: `${mode}-${Date.now()}-${i}`,
         mode: mode,
@@ -112,20 +112,47 @@ export default function RizzPage() {
 
   const rizzModes = getLocalizedRizzModes(tModes)
   const [images, setImages] = useState<UploadedImage[]>([])
+  const [userNotes, setUserNotes] = useState("")
   const [selectedMode, setSelectedMode] = useState<string | null>(null)
   const [responses, setResponses] = useState<RizzResponse[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [extractedText, setExtractedText] = useState("")
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(String(reader.result))
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+
+  const extractTextFromImages = async (): Promise<string> => {
+    if (images.length === 0) return ""
+    const base64Images = await Promise.all(images.map((img) => fileToBase64(img.file)))
+    if (base64Images.length === 0) return ""
+    const res = await fetch("/api/extract-screenshot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ images: base64Images }),
+    })
+    if (!res.ok) return ""
+    const data = await res.json()
+    return data.text || ""
+  }
 
   const handleGenerate = async () => {
     if (!selectedMode || images.length === 0) return
 
     setIsGenerating(true)
-
-    // Call the mode generation API
-    const newResponses = await generateResponses(selectedMode, locale)
-    setResponses(newResponses)
-    setIsGenerating(false)
+    try {
+      const text = await extractTextFromImages()
+      setExtractedText(text)
+      const newResponses = await generateResponses(selectedMode, locale, userNotes || undefined, text || undefined)
+      setResponses(newResponses)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const handleCopy = (content: string, id: string) => {
@@ -138,9 +165,17 @@ export default function RizzPage() {
     if (!selectedMode) return
 
     setIsGenerating(true)
-    const newResponses = await generateResponses(selectedMode, locale)
-    setResponses(newResponses)
-    setIsGenerating(false)
+    try {
+      const newResponses = await generateResponses(
+        selectedMode,
+        locale,
+        userNotes || undefined,
+        extractedText || undefined
+      )
+      setResponses(newResponses)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const getModeName = (modeKey: string) => {
@@ -184,9 +219,22 @@ export default function RizzPage() {
           </h2>
           <UploadDropzone
             images={images}
-            onImagesChange={setImages}
+            onImagesChange={(imgs) => {
+              setImages(imgs)
+              setExtractedText("")
+            }}
             maxImages={3}
           />
+          <label className="mt-4 block">
+            <span className="text-body-sm text-muted">{tRizz('contextNotes')}</span>
+            <textarea
+              placeholder={tRizz('contextNotesPlaceholder')}
+              value={userNotes}
+              onChange={(e) => setUserNotes(e.target.value)}
+              className="mt-2 w-full rounded-2xl border border-cardBorder bg-surface px-4 py-3 text-body-md text-text placeholder:text-muted focus:border-accent focus:outline-none"
+              rows={2}
+            />
+          </label>
         </div>
 
         {/* Mode Selection */}

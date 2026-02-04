@@ -183,6 +183,8 @@
     "emptyState": "Upload a screenshot and pick a mode to get started",
     "copy": "Copy",
     "copied": "Copied!",
+    "contextNotes": "Context (optional)",
+    "contextNotesPlaceholder": "Paste the conversation or add any context...",
     "imagensDeConversacion": "Conversation Images",
     "subeHasta3Imagenes": "Upload up to 3 images from your chat",
     "agregar": "Add",

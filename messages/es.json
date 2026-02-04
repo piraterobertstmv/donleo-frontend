@@ -183,6 +183,8 @@
     "emptyState": "Sube una captura de pantalla y elige un modo para comenzar",
     "copy": "Copiar",
     "copied": "¡Copiado!",
+    "contextNotes": "Contexto (opcional)",
+    "contextNotesPlaceholder": "Pega la conversación o añade contexto...",
     "imagensDeConversacion": "Imágenes de la conversación",
     "subeHasta3Imagenes": "Sube hasta 3 imágenes de tu chat",
     "agregar": "Agregar",

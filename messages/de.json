@@ -165,7 +165,9 @@
     "moreOptions": "Mehr Optionen erhalten",
     "emptyState": "Lade einen Screenshot hoch und wähle einen Modus, um zu starten",
     "copy": "Kopieren",
-    "copied": "Kopiert!"
+    "copied": "Kopiert!",
+    "contextNotes": "Kontext (optional)",
+    "contextNotesPlaceholder": "Füge die Unterhaltung ein oder füge Kontext hinzu..."
   },
   "auth": {
     "login": {
