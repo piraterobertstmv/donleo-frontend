@@ -2,10 +2,14 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/providers"
+import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  verification: {
+    google: "ppjD8cthgVKm3mAV-aRAHaQzSMGZWnlYZiid0bkzSk0",
+  },
   title: "DonLeo — Your AI Dating Wingman",
   description: "Instant replies + real coaching. DonLeo keeps you smooth, funny, and in control.",
   icons: {
@@ -42,6 +46,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={inter.className}>
+        <GoogleAnalytics />
         <Providers>{children}</Providers>
       </body>
     </html>
