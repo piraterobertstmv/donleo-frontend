@@ -4,7 +4,7 @@ import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useLocale, useTranslations } from 'next-intl'
-import { MessageSquare, Sparkles, User, Crown } from "lucide-react"
+import { MessageSquare, Sparkles, User, Crown, Gift } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FloatingPillNav } from "./floating-pill-nav"
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
@@ -27,16 +27,16 @@ export function AppShell({ children }: AppShellProps) {
   const locale = useLocale()
   const pathname = usePathname()
 
-  // Top navigation: only Wingman and Rizzle
+  // Top navigation: Wingman, Rizzle, Affiliates
   const navItems: NavItem[] = [
     { label: t('wingman'), href: '/app/wingman', icon: MessageSquare },
     { label: t('rizzle'), href: '/app/rizz', icon: Sparkles },
+    { label: t('affiliate'), href: '/app/affiliate', icon: Gift },
   ]
 
   const isProfileActive =
     pathname === `/app/profile` ||
-    pathname.startsWith(`/app/profile/`) ||
-    pathname === `/app/affiliate`
+    pathname.startsWith(`/app/profile/`)
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
