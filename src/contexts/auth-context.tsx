@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = await firebaseUser.getIdToken();
       let userProfile = await fetchProfileFromBackend(token);
-      // If no profile (e.g. user signed up before MongoDB), try to create one
+      // If no profile (e.g. create-profile failed during signup or legacy user), try to create one
       if (!userProfile) {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
         if (backendUrl) {
@@ -66,9 +66,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             },
             body: JSON.stringify({
               displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0],
+              email: firebaseUser.email || undefined,
             }),
           });
-          if (createRes.ok) {
+          const createText = await createRes.text();
+          if (createRes.ok || (createRes.status === 400 && createText.includes('already exists'))) {
             userProfile = await fetchProfileFromBackend(token);
           }
         }
@@ -97,28 +99,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     console.log('🔐 Starting signup...');
     const userCredential = await signUp(email, password, displayName);
     console.log('✅ Firebase auth user created:', userCredential.user.uid);
-    
+
     // Create profile on backend MongoDB
     if (userCredential.user) {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+      if (!backendUrl) {
+        console.error('❌ NEXT_PUBLIC_BACKEND_URL is not set');
+        throw new Error('Server configuration error. Please try again later.');
+      }
+
       try {
-        const token = await userCredential.user.getIdToken();
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-        
+        // Force token refresh so we have a valid token right after signup
+        const token = await userCredential.user.getIdToken(true);
+
         const createProfileRes = await fetch(`${backendUrl}/api/auth/create-profile`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             displayName: displayName || email.split('@')[0],
+            email,
             referredByCode: affiliateCode?.trim() || undefined,
           }),
         });
 
         if (!createProfileRes.ok) {
           const text = await createProfileRes.text();
-          console.error('❌ Failed to create backend profile:', text);
+          // Profile already exists (e.g. race with auth state) - treat as success
+          if (createProfileRes.status === 400 && text.includes('already exists')) {
+            return;
+          }
+          console.error('❌ Failed to create backend profile:', createProfileRes.status, text);
           throw new Error('Failed to create profile');
         }
       } catch (error) {
