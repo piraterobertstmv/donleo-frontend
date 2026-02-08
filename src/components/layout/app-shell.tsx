@@ -33,7 +33,10 @@ export function AppShell({ children }: AppShellProps) {
     { label: t('rizzle'), href: '/app/rizz', icon: Sparkles },
   ]
 
-  const isProfileActive = pathname === `/app/profile` || pathname.startsWith(`/app/profile/`)
+  const isProfileActive =
+    pathname === `/app/profile` ||
+    pathname.startsWith(`/app/profile/`) ||
+    pathname === `/app/affiliate`
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">

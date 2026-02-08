@@ -190,6 +190,10 @@
     "signup": {
       "title": "Créer un compte",
       "subtitle": "Commençons. Fais passer ton jeu de rencontre au niveau supérieur aujourd'hui.",
+      "affiliateCode": "Code d'affilié",
+      "affiliateCodePlaceholder": "code",
+      "affiliateCodeInvalid": "Le code doit contenir 3 à 12 lettres ou chiffres",
+      "optional": "optionnel",
       "name": "Nom",
       "namePlaceholder": "Ton nom",
       "email": "Email",
@@ -229,11 +233,37 @@
     "settings": "Paramètres",
     "logout": "Se déconnecter"
   },
+  "affiliate": {
+    "title": "Partenaire",
+    "refresh": "Actualiser",
+    "yourCode": "Ton code parrain",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "noCodeTitle": "Obtenir ton code parrain",
+    "noCodeSubtitle": "Partage ton code et gagne quand tes amis passent en premium.",
+    "generateCode": "Générer un code",
+    "referredUsers": "Utilisateurs parrainés",
+    "premiumUsers": "Utilisateurs premium",
+    "planBreakdown": "Répartition par plan",
+    "weekly": "Hebdomadaire",
+    "monthly": "Mensuel",
+    "annual": "Annuel",
+    "payoutThisMonth": "Commission ce mois",
+    "month": "Mois",
+    "recentReferrals": "Parrainages récents",
+    "noReferrals": "Pas encore de parrainages",
+    "premium": "Premium",
+    "free": "Gratuit",
+    "error": "Échec du chargement des données partenaire",
+    "generateError": "Échec de la génération du code",
+    "copyError": "Échec de la copie"
+  },
   "nav": {
     "wingman": "Wingman",
     "rizzle": "Rizzle",
     "profile": "Profil",
-    "yourProfile": "Ton Profil"
+    "yourProfile": "Ton Profil",
+    "affiliate": "Partenaire"
   },
   "common": {
     "loading": "Chargement...",

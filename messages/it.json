@@ -190,6 +190,10 @@
     "signup": {
       "title": "Crea un account",
       "subtitle": "Iniziamo. Porta il tuo gioco di dating al livello successivo oggi.",
+      "affiliateCode": "Codice affiliato",
+      "affiliateCodePlaceholder": "codice",
+      "affiliateCodeInvalid": "Il codice deve essere di 3–12 lettere o numeri",
+      "optional": "opzionale",
       "name": "Nome",
       "namePlaceholder": "Il tuo nome",
       "email": "Email",
@@ -229,11 +233,37 @@
     "settings": "Impostazioni",
     "logout": "Esci"
   },
+  "affiliate": {
+    "title": "Affiliato",
+    "refresh": "Aggiorna",
+    "yourCode": "Il tuo codice referral",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "noCodeTitle": "Ottieni il tuo codice referral",
+    "noCodeSubtitle": "Condividi il tuo codice e guadagna quando gli amici passano a premium.",
+    "generateCode": "Genera codice",
+    "referredUsers": "Utenti referenziati",
+    "premiumUsers": "Utenti premium",
+    "planBreakdown": "Ripartizione per piano",
+    "weekly": "Settimanale",
+    "monthly": "Mensile",
+    "annual": "Annuale",
+    "payoutThisMonth": "Pagamento questo mese",
+    "month": "Mese",
+    "recentReferrals": "Referral recenti",
+    "noReferrals": "Nessun referral ancora",
+    "premium": "Premium",
+    "free": "Gratuito",
+    "error": "Errore nel caricamento dati affiliato",
+    "generateError": "Errore nella generazione del codice",
+    "copyError": "Errore nella copia"
+  },
   "nav": {
     "wingman": "Wingman",
     "rizzle": "Rizzle",
     "profile": "Profilo",
-    "yourProfile": "Il tuo Profilo"
+    "yourProfile": "Il tuo Profilo",
+    "affiliate": "Affiliato"
   },
   "common": {
     "loading": "Caricamento...",

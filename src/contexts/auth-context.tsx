@@ -15,7 +15,7 @@ interface AuthContextValue {
   user: User | null;
   profile: UserProfile | null;
   loading: boolean;
-  signUp: (email: string, password: string, displayName?: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName?: string, affiliateCode?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -87,11 +87,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Sign up wrapper - also create profile on backend
+  // Sign up wrapper - also create profile on backend, optionally apply affiliate code
   const handleSignUp = async (
     email: string,
     password: string,
-    displayName?: string
+    displayName?: string,
+    affiliateCode?: string
   ) => {
     console.log('🔐 Starting signup...');
     const userCredential = await signUp(email, password, displayName);
@@ -101,34 +102,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userCredential.user) {
       try {
         const token = await userCredential.user.getIdToken();
-        console.log('🔑 Got Firebase ID token');
-        
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-        console.log('📍 Backend URL:', backendUrl);
         
-        const createProfileUrl = `${backendUrl}/api/auth/create-profile`;
-        console.log('📤 Calling:', createProfileUrl);
-        
-        const response = await fetch(createProfileUrl, {
+        const createProfileRes = await fetch(`${backendUrl}/api/auth/create-profile`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ displayName: displayName || email.split('@')[0] }),
+          body: JSON.stringify({
+            displayName: displayName || email.split('@')[0],
+            referredByCode: affiliateCode?.trim() || undefined,
+          }),
         });
 
-        console.log('📬 Backend response status:', response.status);
-        const responseText = await response.text();
-        console.log('📬 Backend response:', responseText);
-
-        if (!response.ok) {
-          console.error('❌ Failed to create backend profile:', responseText);
-        } else {
-          console.log('✅ MongoDB profile created successfully');
+        if (!createProfileRes.ok) {
+          const text = await createProfileRes.text();
+          console.error('❌ Failed to create backend profile:', text);
+          throw new Error('Failed to create profile');
         }
       } catch (error) {
-        console.error('❌ Error creating backend profile:', error);
+        console.error('❌ Error during signup:', error);
+        throw error;
       }
     }
     // Auth state change listener will handle setting user/profile

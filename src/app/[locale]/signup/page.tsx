@@ -15,6 +15,7 @@ export default function SignupPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [affiliateCode, setAffiliateCode] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -28,16 +29,19 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    const trimmed = affiliateCode.trim()
+    if (trimmed && !/^[a-zA-Z0-9]{3,12}$/.test(trimmed)) {
+      setError(t('affiliateCodeInvalid'))
+      return
+    }
     setIsLoading(true)
 
     try {
-      // Create account with Firebase
-      await signUp(email, password, name)
-      // Navigate to app after successful sign up
+      await signUp(email, password, name, trimmed || undefined)
       router.push("/app", { locale })
       router.refresh()
     } catch (err) {
-      setError(getAuthErrorMessage(err))
+      setError(typeof err === 'object' && err && 'message' in err ? String((err as Error).message) : getAuthErrorMessage(err))
     } finally {
       setIsLoading(false)
     }
@@ -93,6 +97,22 @@ export default function SignupPage() {
                 className="w-full rounded-2xl border border-cardBorder bg-surface2 px-4 py-3 text-body-md text-text placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
                 required
                 disabled={isLoading}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="affiliateCode" className="mb-2 block text-body-md text-text">
+                {t('affiliateCode')} <span className="text-muted">({t('optional')})</span>
+              </label>
+              <input
+                type="text"
+                id="affiliateCode"
+                value={affiliateCode}
+                onChange={(e) => setAffiliateCode(e.target.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 12))}
+                placeholder={t('affiliateCodePlaceholder')}
+                className="w-full rounded-2xl border border-cardBorder bg-surface2 px-4 py-3 text-body-md text-text placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+                disabled={isLoading}
+                autoComplete="off"
               />
             </div>
 

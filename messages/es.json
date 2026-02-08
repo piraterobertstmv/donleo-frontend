@@ -216,6 +216,10 @@
     "signup": {
       "title": "Crear una cuenta",
       "subtitle": "Comencemos. Lleva tu juego de citas al siguiente nivel hoy.",
+      "affiliateCode": "Código de afiliado",
+      "affiliateCodePlaceholder": "código",
+      "affiliateCodeInvalid": "El código debe tener 3–12 letras o números",
+      "optional": "opcional",
       "name": "Nombre",
       "namePlaceholder": "Tu nombre",
       "email": "Correo electrónico",
@@ -260,11 +264,37 @@
     "language": "Idioma",
     "logout": "Cerrar Sesión"
   },
+  "affiliate": {
+    "title": "Afiliado",
+    "refresh": "Actualizar",
+    "yourCode": "Tu código de referido",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "noCodeTitle": "Obtén tu código de referido",
+    "noCodeSubtitle": "Comparte tu código y gana cuando tus amigos se pasen a premium.",
+    "generateCode": "Generar código",
+    "referredUsers": "Usuarios referidos",
+    "premiumUsers": "Usuarios premium",
+    "planBreakdown": "Desglose por plan",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "annual": "Anual",
+    "payoutThisMonth": "Pago este mes",
+    "month": "Mes",
+    "recentReferrals": "Referidos recientes",
+    "noReferrals": "Sin referidos aún",
+    "premium": "Premium",
+    "free": "Gratis",
+    "error": "Error al cargar datos de afiliado",
+    "generateError": "Error al generar código",
+    "copyError": "Error al copiar"
+  },
   "nav": {
     "wingman": "Wingman",
     "rizzle": "Rizzle",
     "profile": "Perfil",
-    "yourProfile": "Tu Perfil"
+    "yourProfile": "Tu Perfil",
+    "affiliate": "Afiliado"
   },
   "common": {
     "loading": "Cargando...",

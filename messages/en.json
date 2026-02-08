@@ -216,6 +216,10 @@
     "signup": {
       "title": "Create an account",
       "subtitle": "Let's get you started. Level up your dating game today.",
+      "affiliateCode": "Affiliate code",
+      "affiliateCodePlaceholder": "code",
+      "affiliateCodeInvalid": "Code must be 3–12 letters or numbers",
+      "optional": "optional",
       "name": "Name",
       "namePlaceholder": "Your name",
       "email": "Email",
@@ -260,11 +264,37 @@
     "language": "Language",
     "logout": "Logout"
   },
+  "affiliate": {
+    "title": "Affiliate",
+    "refresh": "Refresh",
+    "yourCode": "Your referral code",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "noCodeTitle": "Get your referral code",
+    "noCodeSubtitle": "Share your code and earn when friends go premium.",
+    "generateCode": "Generate code",
+    "referredUsers": "Referred users",
+    "premiumUsers": "Premium users",
+    "planBreakdown": "Plan breakdown",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "payoutThisMonth": "Payout this month",
+    "month": "Month",
+    "recentReferrals": "Recent referrals",
+    "noReferrals": "No referrals yet",
+    "premium": "Premium",
+    "free": "Free",
+    "error": "Failed to load affiliate data",
+    "generateError": "Failed to generate code",
+    "copyError": "Failed to copy"
+  },
   "nav": {
     "wingman": "Wingman",
     "rizzle": "Rizzle",
     "profile": "Profile",
-    "yourProfile": "Your Profile"
+    "yourProfile": "Your Profile",
+    "affiliate": "Affiliate"
   },
   "common": {
     "loading": "Loading...",

@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { useRouter } from "@/i18n/routing"
+import { useRouter, Link } from "@/i18n/routing"
 import { useLocale, useTranslations } from 'next-intl'
-import { LogOut, Trash2, Check, Crown, Sparkles, User, Mail, Shield, X } from "lucide-react"
+import { LogOut, Trash2, Check, Crown, Sparkles, User, Mail, Shield, X, Gift } from "lucide-react"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
@@ -22,6 +22,7 @@ interface PricingPlan {
 
 export default function ProfilePage() {
   const t = useTranslations('subscription')
+  const tNav = useTranslations('nav')
   const locale = useLocale()
   const { user, profile, signOut } = useAuth()
   const router = useRouter()
@@ -159,6 +160,15 @@ export default function ProfilePage() {
               </div>
             </div>
 
+            {/* Affiliate Link */}
+            <Link
+              href="/app/affiliate"
+              className="flex items-center justify-center gap-2 rounded-2xl border border-accentBorderSoft bg-accentSoft/20 px-5 py-3 text-body-lg text-accent transition-colors hover:bg-accentSoft/30 mb-4"
+            >
+              <Gift className="h-5 w-5" />
+              {tNav('affiliate')}
+            </Link>
+
             {/* Action Buttons */}
             <div className="rounded-3xl border border-cardBorder bg-surface p-6">
               {/* Logout Button */}
@@ -284,8 +294,15 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            {/* Logout & Delete Account Section */}
+            {/* Affiliate + Logout & Delete Account Section */}
             <div className="mx-auto max-w-md">
+              <Link
+                href="/app/affiliate"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-accentBorderSoft bg-accentSoft/20 px-5 py-3 text-body-lg text-accent transition-colors hover:bg-accentSoft/30 mb-4 w-full"
+              >
+                <Gift className="h-5 w-5" />
+                {tNav('affiliate')}
+              </Link>
               <div className="rounded-3xl border border-cardBorder bg-surface p-6">
                 {/* Logout Button */}
                 <button
