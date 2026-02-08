@@ -233,11 +233,6 @@ export default function AffiliatePage() {
           <p className="text-body-xs text-muted mt-1">
             {t("month")}: {p.month}
           </p>
-          {p.payoutThisMonth.rateSummary && (
-            <p className="text-body-xs text-muted mt-1">
-              {p.payoutThisMonth.rateSummary}
-            </p>
-          )}
         </div>
 
         {/* Per-user breakdown */}
