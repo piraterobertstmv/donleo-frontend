@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, Link } from "@/i18n/routing"
 import { useLocale, useTranslations } from 'next-intl'
+import { useSearchParams } from "next/navigation"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { useAuth, getAuthErrorMessage } from "@/contexts/auth-context"
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
@@ -11,6 +12,7 @@ export default function SignupPage() {
   const t = useTranslations('auth.signup')
   const locale = useLocale()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { signUp, user, loading } = useAuth()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -18,6 +20,15 @@ export default function SignupPage() {
   const [affiliateCode, setAffiliateCode] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  // Pre-fill affiliate code from URL (?ref= or ?affiliate=) so affiliate links work
+  useEffect(() => {
+    const ref = searchParams.get("ref") ?? searchParams.get("affiliate")
+    if (ref && typeof ref === "string") {
+      const trimmed = ref.trim().replace(/[^a-zA-Z0-9]/g, "").slice(0, 12)
+      if (trimmed.length >= 3) setAffiliateCode(trimmed)
+    }
+  }, [searchParams])
 
   // Redirect to app if already authenticated
   useEffect(() => {
