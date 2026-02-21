@@ -1,17 +1,18 @@
 "use client"
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Crown, Check } from "lucide-react"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { DonLeoLogo } from "@/components/Brand/DonLeoLogo"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { Link } from '@/i18n/routing'
 import { useAuth } from '@/contexts/auth-context'
-import { STRIPE_PAYMENT_LINKS } from '@/lib/stripe-links'
+import { useStripeCheckout, type CheckoutPlan } from '@/hooks/use-stripe-checkout'
 
 interface Plan {
   id: 'weekly' | 'monthly' | 'yearly'
+  planApi: CheckoutPlan
   name: string
   price: number
   period: string
@@ -20,35 +21,37 @@ interface Plan {
   bestValue?: boolean
   savings?: string
   hasTrial?: boolean
-  checkoutUrl: string
 }
 
 export default function SubscriptionPage() {
   const t = useTranslations('subscription')
+  const locale = useLocale()
   const { user, profile } = useAuth()
+  const { createCheckoutByPlan, loading: checkoutLoading, error: checkoutError } = useStripeCheckout()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
   const plans: Plan[] = [
     {
       id: 'weekly',
+      planApi: 'weekly',
       name: t('plans.weekly.name'),
       price: 2.99,
       period: `/${t('plans.weekly.period')}`,
       hasTrial: false,
-      checkoutUrl: STRIPE_PAYMENT_LINKS.weekly,
     },
     {
       id: 'monthly',
+      planApi: 'monthly',
       name: t('plans.monthly.name'),
       price: 8.99,
       period: `/${t('plans.monthly.period')}`,
       badge: t('plans.monthly.badge'),
       popular: true,
       hasTrial: true,
-      checkoutUrl: STRIPE_PAYMENT_LINKS.monthly,
     },
     {
       id: 'yearly',
+      planApi: 'annual',
       name: t('plans.annual.name'),
       price: 49.99,
       period: `/${t('plans.annual.period')}`,
@@ -56,7 +59,6 @@ export default function SubscriptionPage() {
       bestValue: true,
       savings: t('plans.annual.savePercent'),
       hasTrial: false,
-      checkoutUrl: STRIPE_PAYMENT_LINKS.annual,
     },
   ]
 
@@ -66,10 +68,9 @@ export default function SubscriptionPage() {
     t('features.priority'),
   ]
 
-  const handleCheckout = (planId: string, checkoutUrl: string) => {
+  const handleCheckout = (planId: string, planApi: CheckoutPlan) => {
     setSelectedPlan(planId)
-    // Redirect directly to Stripe Billing Link
-    window.location.href = checkoutUrl
+    createCheckoutByPlan(planApi, locale)
   }
 
   // Get user display info
@@ -186,16 +187,19 @@ export default function SubscriptionPage() {
 
               {/* CTA */}
               <div className="space-y-3">
+                {checkoutError && (
+                  <p className="text-body-sm text-red-500 text-center">{checkoutError}</p>
+                )}
                 <button
-                  onClick={() => handleCheckout(plan.id, plan.checkoutUrl)}
-                  disabled={selectedPlan === plan.id}
+                  onClick={() => handleCheckout(plan.id, plan.planApi)}
+                  disabled={checkoutLoading || selectedPlan === plan.id}
                   className={`w-full px-6 py-3 rounded-full font-semibold transition-all ${
                     plan.popular || plan.bestValue 
                       ? 'bg-accentCTA text-white hover:bg-accentPressed disabled:opacity-50' 
                       : 'bg-surface2 text-text hover:bg-surface3 disabled:opacity-50'
-                  } ${selectedPlan === plan.id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  } ${checkoutLoading || selectedPlan === plan.id ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {plan.hasTrial ? t('trialCta') : t('startNow')}
+                  {checkoutLoading && selectedPlan === plan.id ? t('loading') ?? 'Loading...' : (plan.hasTrial ? t('trialCta') : t('startNow'))}
                 </button>
                 <p className="text-center text-sm text-muted min-h-[20px]">
                   {plan.hasTrial ? t('cancelAnytime') : `Then €${plan.price}/${plan.period}`}

@@ -6,18 +6,18 @@ import { useLocale, useTranslations } from 'next-intl'
 import { LogOut, Trash2, Check, Crown, Sparkles, User, Mail, Shield, X, Gift } from "lucide-react"
 import { PrimaryCTA } from "@/components/ui/primary-cta"
 import { useAuth } from "@/contexts/auth-context"
+import { useStripeCheckout, type CheckoutPlan } from "@/hooks/use-stripe-checkout"
 import { cn } from "@/lib/utils"
-import { STRIPE_PAYMENT_LINKS } from "@/lib/stripe-links"
 
 interface PricingPlan {
   id: 'weekly' | 'monthly' | 'annual'
+  planApi: CheckoutPlan
   name: string
   price: string
   period: string
   badge?: string
   popular?: boolean
   savePercent?: string
-  checkoutUrl: string
 }
 
 export default function ProfilePage() {
@@ -25,6 +25,7 @@ export default function ProfilePage() {
   const tNav = useTranslations('nav')
   const locale = useLocale()
   const { user, profile, signOut } = useAuth()
+  const { createCheckoutByPlan, loading: checkoutLoading, error: checkoutError } = useStripeCheckout()
   const router = useRouter()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -49,28 +50,28 @@ export default function ProfilePage() {
   const plans: PricingPlan[] = [
     {
       id: 'weekly',
+      planApi: 'weekly',
       name: t('plans.weekly.name'),
       price: '€2.99',
       period: t('plans.weekly.period'),
-      checkoutUrl: STRIPE_PAYMENT_LINKS.weekly,
     },
     {
       id: 'monthly',
+      planApi: 'monthly',
       name: t('plans.monthly.name'),
       price: '€8.99',
       period: t('plans.monthly.period'),
       badge: t('plans.monthly.badge'),
       popular: true,
-      checkoutUrl: STRIPE_PAYMENT_LINKS.monthly,
     },
     {
       id: 'annual',
+      planApi: 'annual',
       name: t('plans.annual.name'),
       price: '€49.99',
       period: t('plans.annual.period'),
       badge: t('plans.annual.badge'),
       savePercent: t('plans.annual.savePercent'),
-      checkoutUrl: STRIPE_PAYMENT_LINKS.annual,
     },
   ]
 
@@ -258,19 +259,22 @@ export default function ProfilePage() {
                   </div>
 
                   {/* CTA */}
-                  <a
-                    href={plan.checkoutUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  {checkoutError && (
+                    <p className="text-body-sm text-red-500 text-center mb-2">{checkoutError}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => createCheckoutByPlan(plan.planApi, locale)}
+                    disabled={checkoutLoading}
                     className={cn(
-                      "block w-full rounded-2xl px-4 py-3 text-body-lg font-semibold transition-all mb-3 text-center",
+                      "block w-full rounded-2xl px-4 py-3 text-body-lg font-semibold transition-all mb-3 text-center disabled:opacity-50",
                       plan.popular
                         ? "bg-accentCTA text-white hover:bg-accentPressed shadow-md"
                         : "bg-accentSoft text-accent hover:bg-accentSoft/80"
                     )}
                   >
-                    {t('startNow')}
-                  </a>
+                    {checkoutLoading ? (t('loading') ?? 'Loading...') : t('startNow')}
+                  </button>
                   <p className="text-center text-body-sm text-muted mb-6">
                     {t('thenPrice', { price: plan.price, period: plan.period })}
                   </p>
